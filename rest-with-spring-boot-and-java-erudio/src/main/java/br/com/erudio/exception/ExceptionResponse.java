@@ -1,4 +1,6 @@
 package br.com.erudio.exception;
 
-public record ExceptionResponse() {
+import java.util.Date;
+
+public record ExceptionResponse(Date data, String message, String details) {
 }

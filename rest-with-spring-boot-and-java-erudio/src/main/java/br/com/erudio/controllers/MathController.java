@@ -98,7 +98,7 @@ public class MathController {
 
     public Integer convertInteger(String number) throws IllegalArgumentException {
         if (number == null || number.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new UnsupportedMathOperationException("Insira um valor válido !");
         }
         return Integer.parseInt(number);
     }

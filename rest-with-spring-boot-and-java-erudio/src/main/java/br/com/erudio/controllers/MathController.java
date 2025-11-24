@@ -83,7 +83,7 @@ public class MathController {
 
     public boolean isNumber(String number) throws IllegalArgumentException {
         if (number == null || number.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new UnsupportedMathOperationException("Insira um valor válido !");
         }
         String n = number.replace(",",".");
         return n.matches("[-+]?[0-9]*\\.?[0-9]+");

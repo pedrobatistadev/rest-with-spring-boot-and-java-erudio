@@ -81,7 +81,7 @@ public class MathController {
         return 0;
     }
 
-    public boolean isNumber(String number) throws IllegalArgumentException {
+    public boolean isNumber(String number) {
         if (number == null || number.isEmpty()) {
             throw new UnsupportedMathOperationException("Insira um valor válido !");
         }

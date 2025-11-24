@@ -63,7 +63,7 @@ public class MathController {
             @PathVariable("number2") String number2) {
 
         if (!isNumber(number1) || !isNumber(number2)) {
-            throw new IllegalArgumentException();
+            throw new UnsupportedMathOperationException("Insira um valor válido !");
         }
 
         return (convertDouble(number1) + convertDouble(number2)) / 2;

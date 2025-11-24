@@ -96,7 +96,7 @@ public class MathController {
         return Double.parseDouble(number);
     }
 
-    public Integer convertInteger(String number) throws IllegalArgumentException {
+    public Integer convertInteger(String number) {
         if (number == null || number.isEmpty()) {
             throw new UnsupportedMathOperationException("Insira um valor válido !");
         }

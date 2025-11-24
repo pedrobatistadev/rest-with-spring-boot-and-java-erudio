@@ -29,7 +29,8 @@ public class CustomEntityResponseHandler {
 
     @ExceptionHandler(UnsupportedOperationException.class)
     public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        String data = sdf.format(new Date());
+        ExceptionResponse response = new ExceptionResponse(data, ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

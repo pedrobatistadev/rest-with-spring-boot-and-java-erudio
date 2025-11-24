@@ -17,6 +17,8 @@ import java.util.Date;
 @RestController
 public class CustomEntityResponseHandler {
 
+    static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleAllException(Exception ex, WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));

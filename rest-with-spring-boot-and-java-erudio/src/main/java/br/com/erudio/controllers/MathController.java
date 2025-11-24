@@ -91,7 +91,7 @@ public class MathController {
 
     public Double convertDouble(String number) throws IllegalArgumentException {
         if (number == null || number.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new UnsupportedMathOperationException("Insira um valor válido !");
         }
         return Double.parseDouble(number);
     }

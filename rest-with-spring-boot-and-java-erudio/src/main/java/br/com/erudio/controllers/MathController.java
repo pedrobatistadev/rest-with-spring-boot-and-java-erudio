@@ -89,7 +89,7 @@ public class MathController {
         return n.matches("[-+]?[0-9]*\\.?[0-9]+");
     }
 
-    public Double convertDouble(String number) throws IllegalArgumentException {
+    public Double convertDouble(String number) {
         if (number == null || number.isEmpty()) {
             throw new UnsupportedMathOperationException("Insira um valor válido !");
         }

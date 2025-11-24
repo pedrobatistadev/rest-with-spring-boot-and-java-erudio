@@ -39,7 +39,7 @@ public class MathController {
             @PathVariable("number2") String number2 ) throws IllegalArgumentException {
 
         if (!isNumber(number1) || !isNumber(number2)) {
-            throw new IllegalArgumentException();
+            throw new UnsupportedOperationException("Insira um valor válido !");
         }
 
         return convertInteger(number1) * convertInteger(number2);

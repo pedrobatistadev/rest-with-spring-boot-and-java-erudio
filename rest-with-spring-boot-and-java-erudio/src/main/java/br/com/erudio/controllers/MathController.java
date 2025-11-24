@@ -36,7 +36,7 @@ public class MathController {
     @RequestMapping("/multi/{number1}/{number2}")
     public Integer multi(
             @PathVariable("number1") String number1,
-            @PathVariable("number2") String number2 ) throws IllegalArgumentException {
+            @PathVariable("number2") String number2 ) {
 
         if (!isNumber(number1) || !isNumber(number2)) {
             throw new UnsupportedOperationException("Insira um valor válido !");

@@ -43,7 +43,7 @@ public class MathController {
             throw new UnsupportedMathOperationException("Insira um valor válido ! ");
         }
 
-        return convertInteger(number1) * convertInteger(number2);
+        return math.multi(mathValidation.convertDouble(number1), mathValidation.convertDouble(number2));
     }
 
     @RequestMapping("/div/{number1}/{number2}")

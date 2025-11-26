@@ -65,7 +65,7 @@ public class MathController {
             throw new UnsupportedMathOperationException("Insira um valor válido ! ");
         }
 
-        return (convertDouble(number1) + convertDouble(number2)) / 2;
+        return math.media(mathValidation.convertDouble(number1), mathValidation.convertDouble(number2));
     }
 
     @RequestMapping("/raiz/{number1}")

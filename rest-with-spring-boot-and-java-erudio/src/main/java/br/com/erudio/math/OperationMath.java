@@ -1,5 +1,9 @@
 package br.com.erudio.math;
 
+import br.com.erudio.validations.mathValidation;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 public class OperationMath {
 
     public Double sum(Double number1, Double number2) {

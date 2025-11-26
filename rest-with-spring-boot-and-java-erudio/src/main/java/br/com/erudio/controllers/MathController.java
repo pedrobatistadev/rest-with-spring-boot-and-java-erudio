@@ -25,9 +25,7 @@ public class MathController {
     }
 
     @RequestMapping("/subtr/{number1}/{number2}")
-    public Double subtr(
-            @PathVariable("number1") String number1,
-            @PathVariable("number2") String number2) {
+    public Double subtr(@PathVariable("number1") String number1, @PathVariable("number2") String number2) {
 
         if (!isNumber(number1) || !isNumber(number2)) {
             throw new UnsupportedMathOperationException("Insira um valor válido !");

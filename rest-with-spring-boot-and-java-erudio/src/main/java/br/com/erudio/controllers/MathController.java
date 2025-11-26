@@ -15,9 +15,7 @@ public class MathController {
     OperationMath math = new OperationMath();
 
     @RequestMapping("/sum/{number1}/{number2}")
-    public Double sum(
-            @PathVariable("number1") String number1,
-            @PathVariable("number2") String number2) {
+    public Double sum(@PathVariable("number1") String number1, @PathVariable("number2") String number2) {
 
         if (!isNumber(number1) || !isNumber(number2)) {
             throw new UnsupportedOperationException("Insira um valor válido !");

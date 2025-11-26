@@ -21,7 +21,7 @@ public class MathController {
             throw new UnsupportedMathOperationException("Insira um valor válido ! ");
         }
 
-        return convertDouble(number1) + convertDouble(number2);
+        return math.sum(mathValidation.convertDouble(number1), mathValidation.convertDouble(number2));
     }
 
     @RequestMapping("/subtr/{number1}/{number2}")

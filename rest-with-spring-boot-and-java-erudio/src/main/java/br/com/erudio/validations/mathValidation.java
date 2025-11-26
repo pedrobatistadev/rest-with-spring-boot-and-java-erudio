@@ -1,5 +1,7 @@
 package br.com.erudio.validations;
 
+import br.com.erudio.exception.UnsupportedMathOperationException;
+
 public class mathValidation {
 
     public static boolean isNumber(String number) {

@@ -17,8 +17,8 @@ public class MathController {
     @RequestMapping("/sum/{number1}/{number2}")
     public Double sum(@PathVariable("number1") String number1, @PathVariable("number2") String number2) {
 
-        if (!isNumber(number1) || !isNumber(number2)) {
-            throw new UnsupportedOperationException("Insira um valor válido !");
+        if (!mathValidation.isNumber(number1) || !mathValidation.isNumber(number2)) {
+            throw new UnsupportedMathOperationException("Insira um valor válido ! ");
         }
 
         return convertDouble(number1) + convertDouble(number2);

@@ -72,13 +72,11 @@ public class MathController {
         return (convertDouble(number1) + convertDouble(number2)) / 2;
     }
 
-    @RequestMapping("/raiz/{number}")
-    public Integer raiz(
-            @PathVariable("number") String number) {
-        for (int i = 1; i < convertInteger(number); i++) {
-            if (i * i == convertInteger(number)) {
-                return i;
-            }
+    @RequestMapping("/raiz/{number1}")
+    public int raiz(@PathVariable("number1") String number1) {
+
+        if (!mathValidation.isNumber(number1)) {
+            throw new UnsupportedMathOperationException("Insira um valor válido ! ");
         }
 
         return 0;

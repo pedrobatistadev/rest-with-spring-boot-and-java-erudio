@@ -49,9 +49,7 @@ public class MathController {
     }
 
     @RequestMapping("/div/{number1}/{number2}")
-    public Double div(
-            @PathVariable("number1") String number1,
-            @PathVariable("number2") String number2) {
+    public Double div(@PathVariable("number1") String number1, @PathVariable("number2") String number2) {
 
         if (!mathValidation.isNumber(number1) || !mathValidation.isNumber(number2)) {
             throw new UnsupportedMathOperationException("Insira um valor válido ! ");

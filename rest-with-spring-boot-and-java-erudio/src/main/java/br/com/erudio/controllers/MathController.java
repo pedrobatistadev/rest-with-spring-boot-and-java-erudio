@@ -79,7 +79,7 @@ public class MathController {
             throw new UnsupportedMathOperationException("Insira um valor válido ! ");
         }
 
-        return 0;
+        return math.raiz(mathValidation.convertInteger(number1));
     }
 
     public boolean isNumber(String number) {

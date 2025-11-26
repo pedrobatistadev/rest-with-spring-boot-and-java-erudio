@@ -1,6 +1,9 @@
 package br.com.erudio.controllers;
 
 import br.com.erudio.exception.UnsupportedMathOperationException;
+import br.com.erudio.math.OperationMath;
+import br.com.erudio.validations.mathValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

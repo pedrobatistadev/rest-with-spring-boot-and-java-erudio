@@ -1,6 +1,4 @@
-package br.com.erudio.data.dto;
-
-import jakarta.persistence.*;
+package br.com.erudio.data.dto.v1;
 
 import java.io.Serializable;
 import java.util.Objects;

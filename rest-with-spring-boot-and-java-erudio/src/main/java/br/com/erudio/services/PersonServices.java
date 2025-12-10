@@ -1,8 +1,10 @@
 package br.com.erudio.services;
 
-import br.com.erudio.data.dto.PersonDTO;
+import br.com.erudio.data.dto.v1.PersonDTO;
+import br.com.erudio.data.dto.v2.PersonDTOV2;
 import br.com.erudio.exception.ResourceNotFoundException;
 import br.com.erudio.mapper.ObjectMapper;
+import br.com.erudio.mapper.custom.PersonMapper;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
 import org.slf4j.Logger;
@@ -10,20 +12,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class PersonServices {
 
-    private final AtomicLong counter = new AtomicLong();
-
     private Logger logger = LoggerFactory.getLogger(PersonServices.class.getName());
 
     @Autowired
-    PersonRepository repository;
+    public PersonRepository repository;
+
+    @Autowired
+    public PersonMapper personMap;
 
     public List<PersonDTO> findAll() {
-        logger.info("Finding all People!");
+        logger.warn("Finding all People!");
 
         var entity = repository.findAll();
 
@@ -31,15 +33,15 @@ public class PersonServices {
     }
 
     public PersonDTO findById(Long id) {
-        logger.info("Finding one Person!");
+        logger.warn("Finding one Person!");
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("NotFound"));
+        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
 
         return ObjectMapper.parseObject(entity, PersonDTO.class);
     }
 
     public PersonDTO create(PersonDTO person) {
-        logger.info("Creating Person");
+        logger.warn("Creating Person");
 
         var entity = ObjectMapper.parseObject(person, Person.class);
 
@@ -47,8 +49,9 @@ public class PersonServices {
 
     }
 
+
     public PersonDTO update(PersonDTO person, Long id) {
-        logger.info("Updating Person");
+        logger.warn("Updating Person");
 
         Person up = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
 
@@ -62,10 +65,21 @@ public class PersonServices {
 
     public void delete(Long id) {
 
-        logger.info("Deleting Person");
+        logger.warn("Deleting Person");
 
-        Person del = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("NotFound"));
+        Person del = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
 
         repository.delete(del);
+    }
+
+    //-- Version 2 --
+
+    public PersonDTOV2 createV2(PersonDTOV2 person) {
+        logger.warn("Creating Person V2");
+
+        Person per = personMap.convertDTOtoEntity(person);
+
+        return personMap.convertEntityToDTO(repository.save(per));
+
     }
 }

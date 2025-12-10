@@ -1,33 +1,30 @@
-package br.com.erudio.model;
-
-import jakarta.persistence.*;
+package br.com.erudio.data.dto.v2;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
-@Entity
-@Table(name = "person")
-public class Person implements Serializable {
+
+public class PersonDTOV2 implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "FirstName", nullable = false)
     private String firstName;
-
-    @Column(name = "LastName", nullable = false)
     private String lastName;
-
-    @Column(name = "Adress", nullable = false)
     private String address;
-
-    @Column(name = "Gender", nullable = false)
     private String gender;
+    private Date birthday;
 
-    public Person() {}
+    public PersonDTOV2() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getGender() {
         return gender;
@@ -61,22 +58,22 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-    public Long getId() {
-        return id;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Person person)) return false;
-        return Objects.equals(id, person.id) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && Objects.equals(gender, person.gender);
+        if (!(o instanceof PersonDTOV2 that)) return false;
+        return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(address, that.address) && Objects.equals(gender, that.gender) && Objects.equals(birthday, that.birthday);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address, gender);
+        return Objects.hash(firstName, lastName, address, gender, birthday);
     }
 }

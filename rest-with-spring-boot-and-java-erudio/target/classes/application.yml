@@ -8,7 +8,7 @@ spring:
     password: mikaelson22
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
     show-sql: false

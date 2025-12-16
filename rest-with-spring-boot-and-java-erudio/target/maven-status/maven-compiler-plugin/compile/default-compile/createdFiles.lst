@@ -1,1 +1,14 @@
+br\com\erudio\mapper\custom\PersonMapper.class
+br\com\erudio\services\TestLogService.class
+br\com\erudio\services\PersonServices.class
+br\com\erudio\mapper\ObjectMapper.class
+br\com\erudio\exception\ExceptionResponse.class
+br\com\erudio\exception\ResourceNotFoundException.class
 br\com\erudio\Startup.class
+br\com\erudio\controllers\TestLogController.class
+br\com\erudio\exception\handler\CustomEntityResponseHandler.class
+br\com\erudio\repository\PersonRepository.class
+br\com\erudio\controllers\PersonController.class
+br\com\erudio\model\Person.class
+br\com\erudio\data\dto\v2\PersonDTOV2.class
+br\com\erudio\data\dto\v1\PersonDTO.class

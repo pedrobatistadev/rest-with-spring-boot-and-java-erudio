@@ -41,6 +41,8 @@ public class PersonServices {
 
         var result = ObjectMapper.parseObject(entity, PersonDTO.class);
         result.setBirthDay(new Date());
+        result.setPassword("pedro123");
+        //result.setPhoneNumber("(44) 99931-3342");
 
         return result;
     }

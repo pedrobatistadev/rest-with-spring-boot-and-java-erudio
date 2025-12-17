@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,7 +39,10 @@ public class PersonServices {
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
 
-        return ObjectMapper.parseObject(entity, PersonDTO.class);
+        var result = ObjectMapper.parseObject(entity, PersonDTO.class);
+        result.setBirthDay(new Date());
+
+        return result;
     }
 
     public PersonDTO create(PersonDTO person) {

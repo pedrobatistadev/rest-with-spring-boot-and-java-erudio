@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Objects;
 
 //@JsonPropertyOrder({"id","first_Name","last_Name","adress","gender"})
-@JsonFilter("PersonDTOFilter")
+//@JsonFilter("PersonDTOFilter")
 public class PersonDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,13 +30,13 @@ public class PersonDTO implements Serializable {
 
     private String phoneNumber;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    //@JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDay;
     private String address;
 
     private String password;
 
-    @JsonSerialize(using = GenderSerializer.class)
+    //@JsonSerialize(using = GenderSerializer.class)
     private String gender;
 
     public PersonDTO() {}

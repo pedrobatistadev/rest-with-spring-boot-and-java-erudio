@@ -1,5 +1,6 @@
 package br.com.erudio.services;
 
+import br.com.erudio.controllers.PersonController;
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.data.dto.v2.PersonDTOV2;
 import br.com.erudio.exception.ResourceNotFoundException;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PersonServices {
@@ -44,7 +48,16 @@ public class PersonServices {
         result.setPassword("pedro123");
         //result.setPhoneNumber("(44) 99931-3342");
 
+        Hateoas(id, result);
+
         return result;
+    }
+
+    private static void Hateoas(Long id, PersonDTO result) {
+        result.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
+        result.add(linkTo(methodOn(PersonController.class).create(result)).withRel("create").withType("POST"));
+        result.add(linkTo(methodOn(PersonController.class).update(result,id)).withRel("update").withType("PUT"));
+        result.add(linkTo(methodOn(PersonController.class).delete(id)).withRel("delete").withType("DELETE"));
     }
 
     public PersonDTO create(PersonDTO person) {

@@ -43,7 +43,7 @@ class PersonServicesTest {
 
         assertNotNull(result);
         assertNotNull(result.getPassword());
-        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("self") && link.getHref().endsWith("/person/v1/1") && link.getType().equals(" GET")));
+        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("self") && link.getHref().endsWith("/person/v1/1") && link.getType().equals("GET")));
         assertEquals("Adress test1", person.getAddress());
 
     }

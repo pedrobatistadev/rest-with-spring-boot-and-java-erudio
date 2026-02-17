@@ -3,6 +3,7 @@ package br.com.erudio.testHateoas;
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.model.Person;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +27,16 @@ public class MockPerson {
         dto.setGender((number % 2 == 0) ? "Male" : "Female");
         dto.setLastName("Last name testdto" + number);
         dto.setPhoneNumber("Phone testdto" + number);
+        dto.setPassword("Senha" + number);
         return dto;
     }
 
     public List<Person> mockList () {
         List<Person> people = new ArrayList<>();
-        for (Long i = 0L; i < 10; i++) {
+        for (Long i = 0L; i < 10L; i++) {
             people.add(mockEntity(i));
         }
+
         return people;
     }
 

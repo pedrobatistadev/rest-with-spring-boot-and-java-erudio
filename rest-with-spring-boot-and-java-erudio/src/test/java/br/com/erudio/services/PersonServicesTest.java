@@ -13,11 +13,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +46,7 @@ class PersonServicesTest {
         var result = services.findById(1L);
 
         assertNotNull(result);
+        assertEquals(1L, result.getId());
         assertEquals("pedro123", result.getPassword());
         assertNotNull(result.getPassword());
         assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("self") && link.getHref().endsWith("/person/v1/1") && link.getType().equals("GET")));
@@ -55,9 +58,12 @@ class PersonServicesTest {
 
     @Test
     void create() {
-        Person person = input.mockEntity(1L);
         PersonDTO dto = input.mockDTO(1L);
-        when(repository.save(any(Person.class))).thenReturn(person);
+        dto.setId(null);
+
+        Person persisted = input.mockEntity(1L);
+
+        when(repository.save(any(Person.class))).thenReturn(persisted);
         var result = services.create(dto);
 
         assertNotNull(result.getId());
@@ -66,6 +72,15 @@ class PersonServicesTest {
 
     @Test
     void update() {
+        Person person = input.mockEntity(1L);
+        person.setFirstName("Leonardo");
+        PersonDTO dto = input.mockDTO(1L);
+        dto.setFirstName("Jorge");
+        when(repository.findById(1L)).thenReturn(Optional.of(person));
+        when(repository.save(any(Person.class))).thenReturn(person);
+        PersonDTO result = services.update(dto, 1L);
+
+        assertEquals("Jorge", result.getFirstName());
 
 
     }
@@ -74,11 +89,20 @@ class PersonServicesTest {
     void delete() {
         Person person = input.mockEntity(1L);
         when(repository.findById(1L)).thenReturn(Optional.of(person));
+
         services.delete(1L);
 
+        verify(repository, times(1)).findById(anyLong());
+        verify(repository).delete(person);
     }
 
     @Test
     void findAll() {
+        List<Person> people = input.mockList();
+        when(repository.findAll()).thenReturn(people);
+
+        List<PersonDTO> result = services.findAll();
+
+        verify(repository).findAll();
     }
 }

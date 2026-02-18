@@ -3,6 +3,7 @@ package br.com.erudio.services;
 import br.com.erudio.controllers.PersonController;
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.data.dto.v2.PersonDTOV2;
+import br.com.erudio.exception.RequiredObjectNullException;
 import br.com.erudio.exception.ResourceNotFoundException;
 import br.com.erudio.mapper.ObjectMapper;
 import br.com.erudio.mapper.custom.PersonMapper;
@@ -42,6 +43,9 @@ public class PersonServices {
     }
 
     public PersonDTO findById(Long id) {
+        if (id == null) {
+            throw new RequiredObjectNullException();
+        }
         logger.warn("Finding one Person!");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
@@ -57,6 +61,9 @@ public class PersonServices {
     }
 
     public PersonDTO create(PersonDTO person) {
+        if (person == null) {
+            throw new RequiredObjectNullException();
+        }
         logger.warn("Creating Person");
 
         var entity = ObjectMapper.parseObject(person, Person.class);
@@ -71,6 +78,9 @@ public class PersonServices {
 
 
     public PersonDTO update(PersonDTO person, Long id) {
+        if (id == null || person == null) {
+            throw new RequiredObjectNullException();
+        }
         logger.warn("Updating Person");
 
         Person up = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
@@ -88,6 +98,10 @@ public class PersonServices {
     }
 
     public void delete(Long id) {
+
+        if (id == null) {
+            throw new RequiredObjectNullException();
+        }
 
         logger.warn("Deleting Person");
 

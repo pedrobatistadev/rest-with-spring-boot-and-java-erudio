@@ -1,6 +1,7 @@
 package br.com.erudio.services;
 
 import br.com.erudio.data.dto.v1.PersonDTO;
+import br.com.erudio.exception.RequiredObjectNullException;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
 import br.com.erudio.testHateoas.MockPerson;
@@ -104,5 +105,21 @@ class PersonServicesTest {
         List<PersonDTO> result = services.findAll();
 
         verify(repository).findAll();
+        PersonDTO fivePerson = result.get(5);
+        assertEquals("Female", fivePerson.getGender());
     }
+
+    @Test
+    void testCreateWithNullPerson() {
+        Exception exception = assertThrows(RequiredObjectNullException.class, () -> {
+            services.create(null);
+        });
+
+        String excpectedMenssage = "it is not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(excpectedMenssage));
+
+    }
+
 }

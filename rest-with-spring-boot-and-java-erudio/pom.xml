@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<dozer.version>7.0.0</dozer.version>
+		<spring.doc>2.7.0</spring.doc>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -31,6 +32,12 @@
 		<dependency>
 			<groupId>org.springframework.hateoas</groupId>
 			<artifactId>spring-hateoas</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${spring.doc}</version>
 		</dependency>
 
 		<dependency>

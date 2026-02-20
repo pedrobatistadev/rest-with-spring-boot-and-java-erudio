@@ -17,3 +17,6 @@ logging:
   level:
     root: WARN
     #br.com.erudio: WARN
+spring-doc:
+  paths-to-match: /person/v1/**
+

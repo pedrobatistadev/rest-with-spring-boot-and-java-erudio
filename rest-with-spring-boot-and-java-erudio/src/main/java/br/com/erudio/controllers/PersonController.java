@@ -1,5 +1,6 @@
 package br.com.erudio.controllers;
 
+import br.com.erudio.controllers.docs.PersonControllerDocs;
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.data.dto.v2.PersonDTOV2;
 import br.com.erudio.mapper.custom.PersonMapper;
@@ -19,49 +20,37 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/person/v1")
-public class PersonController {
+public class PersonController implements PersonControllerDocs {
 
     @Autowired
     public PersonServices service;
 
-    @GetMapping(value = "/{id}", produces =  {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    @Operation(summary = "Find People", description = "Finds People", tags = {"People"}, responses = {
-            @ApiResponse(description = "Sucess", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class)))),
-            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
-            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
-    })
+    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Override
     public PersonDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    @Operation(summary = "Find All People", description = "Finds All People", tags = {"People"}, responses = {
-            @ApiResponse(description = "Sucess", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_XML_VALUE,array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class)))),
-            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
-            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
-    })
+    @Override
     public List<PersonDTO> findAll() {
         return service.findAll();
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-
+    @Override
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
     }
 
     @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Override
     public PersonDTO update(@RequestBody PersonDTO person, @PathVariable Long id) {
         return service.update(person, id);
     }
 
     @DeleteMapping(value = "/{id}")
+    @Override
     public ResponseEntity<?> delete(@PathVariable Long id) {
         service.delete(id);
 

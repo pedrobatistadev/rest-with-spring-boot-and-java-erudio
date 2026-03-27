@@ -1,10 +1,11 @@
-package br.com.erudio.services;
+package br.com.erudio.unittests.services;
 
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.exception.RequiredObjectNullException;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
-import br.com.erudio.testHateoas.MockPerson;
+import br.com.erudio.services.PersonServices;
+import br.com.erudio.unittests.testHateoas.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -15,8 +15,10 @@ spring:
     open-in-view: false
 logging:
   level:
-    root: WARN
+    root: INFO
     #br.com.erudio: WARN
 spring-doc:
   paths-to-match: /person/v1/**
+  swagger-ui:
+    use-root-path: true
 

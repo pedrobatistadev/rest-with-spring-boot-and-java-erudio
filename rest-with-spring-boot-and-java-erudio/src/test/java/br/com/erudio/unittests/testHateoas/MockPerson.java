@@ -1,4 +1,4 @@
-package br.com.erudio.testHateoas;
+package br.com.erudio.unittests.testHateoas;
 
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.model.Person;

@@ -2,6 +2,7 @@ package br.com.erudio.integrationtests.swagger;
 
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -26,5 +27,4 @@ public class SwaggerIntegrationTest extends AbstractIntegrationTest {
 
         assertTrue(content.contains("Swagger UI"));
     }
-
 }

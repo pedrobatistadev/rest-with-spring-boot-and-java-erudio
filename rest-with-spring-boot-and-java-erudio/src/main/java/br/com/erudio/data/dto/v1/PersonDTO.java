@@ -40,22 +40,16 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     //@JsonSerialize(using = GenderSerializer.class)
     private String gender;
 
+    private Boolean enabled;
+
     public PersonDTO() {}
 
-    public String getGender() {
-        return gender;
+    public Long getId() {
+        return id;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -74,12 +68,12 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.lastName = lastName;
     }
 
-    public Long getId() {
-        return id;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Date getBirthDay() {
@@ -90,13 +84,12 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.birthDay = birthDay;
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPassword() {
@@ -107,14 +100,31 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.password = password;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PersonDTO personDTO)) return false;
-        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(password, personDTO.password) && Objects.equals(gender, personDTO.gender);
+        if (!super.equals(o)) return false;
+        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(password, personDTO.password) && Objects.equals(gender, personDTO.gender) && Objects.equals(enabled, personDTO.enabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, birthDay, address, password, gender);
+        return Objects.hash(super.hashCode(), id, firstName, lastName, phoneNumber, birthDay, address, password, gender, enabled);
     }
 }

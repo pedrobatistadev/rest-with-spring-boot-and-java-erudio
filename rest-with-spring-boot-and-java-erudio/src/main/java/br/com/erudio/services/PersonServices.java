@@ -9,6 +9,7 @@ import br.com.erudio.mapper.ObjectMapper;
 import br.com.erudio.mapper.custom.PersonMapper;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,21 @@ public class PersonServices {
         Person del = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
 
         repository.delete(del);
+    }
+
+    @Transactional
+    public PersonDTO disablePerson(Long id) {
+
+        logger.warn("Disabling Person");
+
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+        repository.disablePerson(id);
+
+        Person entity = repository.findById(id).get();
+        PersonDTO dto = ObjectMapper.parseObject(entity, PersonDTO.class);
+
+        return dto;
+
     }
 
     //-- Version 2 --

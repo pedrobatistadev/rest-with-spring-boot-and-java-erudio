@@ -50,7 +50,8 @@ public class PersonController implements PersonControllerDocs {
     }
 
     @PatchMapping(value = "/atu/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    public PersonDTO disablePerson(@PathVariable Long id) {
+    @Override
+    public PersonDTO disablePerson(Long id) {
         return service.disablePerson(id);
     }
 

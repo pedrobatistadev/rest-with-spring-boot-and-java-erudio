@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Modifying
-    @Query("UPDATE Person p SET p.enables = false WHERE p.id =:id")
+    @Query("UPDATE Person p SET p.enabled = false WHERE p.id =:id")
     public void disablePerson(@Param("id") Long id);
 
 }

@@ -1,4 +1,4 @@
-package br.com.erudio.integrationtests.controllers.withjson;
+package br.com.erudio.integrationtests.controllers.corsWithjson;
 
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.dto.PersonDTO;
@@ -6,7 +6,6 @@ import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dozermapper.core.Mapper;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerTest extends AbstractIntegrationTest {
+class PersonControllerCorsWithJson extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
@@ -61,6 +60,8 @@ class PersonControllerTest extends AbstractIntegrationTest {
 
         PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
         person = result;
+
+        System.out.println("Id do teste 1: " + person.getId());
 
         assertNotNull(result);
         assertEquals("Klaus", result.getFirstName());
@@ -149,26 +150,12 @@ class PersonControllerTest extends AbstractIntegrationTest {
         assertEquals("Invalid CORS request", content);
     }
 
-    @Test
-    void update() {
-    }
-
-    @Test
-    void delete() {
-    }
-
-    @Test
-    void createV2() {
-    }
-
-    @Test
-    void findAll() {
-    }
 
     private void mockPerson() {
         person.setFirstName("Klaus");
         person.setLastName("Mikaelson22");
         person.setAddress("New Orleans - Luisiana - EUA");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 }

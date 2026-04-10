@@ -33,7 +33,6 @@ public class AbstractIntegrationTest {
         @Override
         public void initialize(ConfigurableApplicationContext applicationContext) {
             startContainer();
-            System.out.println("TA AQUI PEDROOOOO " + mysql.getJdbcUrl() + mysql.getDatabaseName());
             ConfigurableEnvironment environment = applicationContext.getEnvironment();
             MapPropertySource testcontainers = new MapPropertySource("testcontainers",
                     (Map) createConnectionConfiguration());

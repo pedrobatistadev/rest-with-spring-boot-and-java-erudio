@@ -6,6 +6,7 @@ import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
 import br.com.erudio.services.PersonServices;
 import br.com.erudio.unittests.testHateoas.MockPerson;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -34,7 +35,7 @@ class PersonServicesTest {
     @Mock
     private PersonRepository repository;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         input = new MockPerson();
         MockitoAnnotations.openMocks(this);

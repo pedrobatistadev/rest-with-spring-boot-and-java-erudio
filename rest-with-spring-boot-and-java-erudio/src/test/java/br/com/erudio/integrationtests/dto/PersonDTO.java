@@ -1,11 +1,13 @@
 package br.com.erudio.integrationtests.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import javax.swing.text.StyledEditorKit;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+@XmlRootElement
 public class PersonDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -99,6 +101,21 @@ public class PersonDTO implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonDTO{" +
+                "id=" + this.id + "\n" +
+                ", firstName='" + firstName + "\n" +
+                ", lastName='" + lastName + "\n" +
+                ", phoneNumber='" + phoneNumber + "\n" +
+                ", birthDay=" + birthDay + "\n" +
+                ", address='" + address + "\n" +
+                ", password='" + password + "\n" +
+                ", gender='" + gender + "\n" +
+                ", enabled=" + enabled + "\n" +
+                '}';
     }
 
     @Override

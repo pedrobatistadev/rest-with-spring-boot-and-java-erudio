@@ -6,4 +6,8 @@ public interface TestConfigs {
     String HEADER_PARAM_ORIGIN = "Origin";
     String ORIGIN_GITHUB = "https://github.com/pedrobatistadev";
     String ORIGIN_WRONG = "https://web.whatsapp.com";
+    String ACCEPT = "Accept";
+    String MEDIATYPEJSON = "application/json";
+    String CONTENT_TYPE = "Content-Type";
+    String MEDIATYPEXML = "application/xml";
 }

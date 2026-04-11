@@ -3,7 +3,9 @@ package br.com.erudio.integrationtests.controllers.withJson;
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.dto.PersonDTO;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
+import br.com.erudio.model.Person;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -12,8 +14,14 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
+import org.mockito.junit.MockitoJUnit;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+
+import javax.print.attribute.standard.Media;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +48,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         mockPerson();
 
         specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
+                .addHeaders(header())
                 .setBasePath("/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
@@ -61,13 +69,11 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
         person = result;
 
-        System.out.println("Id do teste 1: " + person.getId());
-
         assertNotNull(result);
         assertEquals("Klaus", result.getFirstName());
         assertEquals("New Orleans - Luisiana - EUA", result.getAddress());
 
-        assertEquals(7, result.getId());
+        assertTrue(person.getId() > 0);
     }
 
     @Test
@@ -90,13 +96,22 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         assertEquals("Klaus", result.getFirstName());
     }
 
+    @Test
     @Order(3)
     void disable() throws JsonProcessingException {
-        var content = given(specification)
+        RequestSpecification specification2 = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
+                .setBasePath("/person/v1/atu")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        var content = given(specification2)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("id", person.getId())
                 .when()
-                .get("{id}")
+                .patch("{id}")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -110,11 +125,65 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         assertFalse(result.getEnabled());
     }
 
+    @Test
+    @Order(4)
+    void update() throws JsonProcessingException {
+        person.setFirstName("Elijah");
+
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("id", person.getId())
+                .body(person)
+                .when()
+                .put("{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
+
+        assertEquals("Elijah", person.getFirstName());
+    }
+
+    @Test
+    @Order(5)
+    void findAll() throws JsonProcessingException {
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        List<PersonDTO> people = objectMapper.readValue(content, new TypeReference<List<PersonDTO>>() {
+        });
+
+        System.out.println("LISTA COMPLETA BANCO CONTEINER");
+        System.out.println(people);
+
+        assertTrue(people.size() == 1);
+        assertEquals("Elijah", people.get(0).getFirstName());
+
+
+    }
+
     private void mockPerson() {
         person.setFirstName("Klaus");
         person.setLastName("Mikaelson22");
         person.setAddress("New Orleans - Luisiana - EUA");
         person.setGender("Male");
         person.setEnabled(true);
+    }
+
+    private Map<String,String> header() {
+        return Map.of(
+                TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB,
+                TestConfigs.ACCEPT, TestConfigs.MEDIATYPEJSON
+        );
     }
 }

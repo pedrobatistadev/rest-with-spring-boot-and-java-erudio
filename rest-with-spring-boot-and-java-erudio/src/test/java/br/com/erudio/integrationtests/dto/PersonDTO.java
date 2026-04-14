@@ -1,5 +1,6 @@
 package br.com.erudio.integrationtests.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import javax.swing.text.StyledEditorKit;

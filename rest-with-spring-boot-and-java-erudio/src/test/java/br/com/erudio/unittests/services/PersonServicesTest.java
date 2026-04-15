@@ -62,14 +62,12 @@ class PersonServicesTest {
     void create() {
         PersonDTO dto = input.mockDTO(1L);
         dto.setId(null);
+        Person person = input.mockEntity(1L);
+        when(repository.save(any(Person.class))).thenReturn(person);
 
-        Person persisted = input.mockEntity(1L);
+        PersonDTO content = services.create(dto);
 
-        when(repository.save(any(Person.class))).thenReturn(persisted);
-        var result = services.create(dto);
-
-        assertNotNull(result.getId());
-
+        assertNotNull(content.getId());
     }
 
     @Test

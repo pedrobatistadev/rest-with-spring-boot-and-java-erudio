@@ -76,13 +76,32 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
                 .asString();
 
         PersonDTO retorno = objectMapperToXML.readValue(content, PersonDTO.class);
+        person = retorno;
         assertTrue(retorno.getId() > 0);
 
 
     }
 
     @Test
-    void update() {
+    @Order(2)
+    void update() throws JsonProcessingException {
+        person.setFirstName("Grasieli");
+
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .pathParam("id", person.getId())
+                .body(person)
+                .when()
+                .put("{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        PersonDTO retorno = objectMapperToXML.readValue(content, PersonDTO.class);
+
+        assertEquals("Grasieli", retorno.getFirstName());
     }
 
     @Test

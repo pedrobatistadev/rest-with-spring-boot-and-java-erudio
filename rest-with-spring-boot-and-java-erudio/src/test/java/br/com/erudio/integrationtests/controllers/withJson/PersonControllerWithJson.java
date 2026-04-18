@@ -168,8 +168,18 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
 
         assertTrue(people.size() == 1);
         assertEquals("Elijah", people.get(0).getFirstName());
+    }
 
-
+    @Test
+    @Order(6)
+    void delete() throws JsonProcessingException {
+        var content = given(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("id", person.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
     }
 
     private void mockPerson() {

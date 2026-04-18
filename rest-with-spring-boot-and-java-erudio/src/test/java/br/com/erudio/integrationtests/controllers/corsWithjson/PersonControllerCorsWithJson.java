@@ -150,6 +150,26 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
         assertEquals("Invalid CORS request", content);
     }
 
+    @Test
+    @Order(5)
+    void delete() throws JsonProcessingException {
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
+                .setContentType(MediaType.APPLICATION_JSON_VALUE)
+                .setBasePath("/person/v1")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+
+        var content = given(specification)
+                .pathParam("id", person.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
+    }
 
     private void mockPerson() {
         person.setFirstName("Klaus");

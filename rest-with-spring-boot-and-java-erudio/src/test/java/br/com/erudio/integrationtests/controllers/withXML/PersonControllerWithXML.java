@@ -4,7 +4,9 @@ import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.dto.PersonDTO;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.erudio.model.Person;
+import br.com.erudio.repository.PersonRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -16,11 +18,13 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.given;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -28,15 +32,15 @@ import java.util.Map;
 class PersonControllerWithXML extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
+    private static RequestSpecification specification2;
     private static XmlMapper objectMapperToXML;
-    private static ObjectMapper objectMapper;
     private static PersonDTO person;
+
+    @Autowired
+    private PersonRepository repository;
 
     @BeforeAll
     static void setUp() {
-        objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
         objectMapperToXML = new XmlMapper();
         objectMapperToXML.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -44,11 +48,41 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
     }
 
     @Test
-    void findById() {
+    @Order(3)
+    void findById() throws JsonProcessingException {
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .pathParam("id", person.getId())
+                .when()
+                .get("{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        PersonDTO result = objectMapperToXML.readValue(content, PersonDTO.class);
+        assertEquals("Grasieli", result.getFirstName());
     }
 
     @Test
-    void findAll() {
+    @Order(5)
+    void findAll() throws JsonProcessingException {
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        System.out.println(repository.findAll());
+
+        List<PersonDTO> people = objectMapperToXML.readValue(content, new TypeReference<List<PersonDTO>>() {});
+
+        assertTrue(people.size() == 1);
     }
 
     @Test
@@ -79,7 +113,6 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
         person = retorno;
         assertTrue(retorno.getId() > 0);
 
-
     }
 
     @Test
@@ -100,16 +133,36 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
                 .asString();
 
         PersonDTO retorno = objectMapperToXML.readValue(content, PersonDTO.class);
-
+        person = retorno;
         assertEquals("Grasieli", retorno.getFirstName());
     }
 
     @Test
-    void disablePerson() {
-    }
+    @Order(4)
+    void disablePerson() throws JsonProcessingException {
+        specification2 = new RequestSpecBuilder()
+                .addHeaders(header())
+                .setBasePath("/person/v1/atu")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
 
-    @Test
-    void delete() {
+        String content = given(specification2)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .pathParam("id", person.getId())
+                .when()
+                .patch("{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        PersonDTO result = objectMapperToXML.readValue(content, PersonDTO.class);
+        person = result;
+
+        assertFalse(result.getEnabled());
     }
 
     private Map<String,String> header() {

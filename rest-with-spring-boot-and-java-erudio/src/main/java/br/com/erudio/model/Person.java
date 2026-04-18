@@ -81,6 +81,18 @@ public class Person implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", gender='" + gender + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Person person)) return false;
         return Objects.equals(id, person.id) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && Objects.equals(gender, person.gender) && Objects.equals(enabled, person.enabled);

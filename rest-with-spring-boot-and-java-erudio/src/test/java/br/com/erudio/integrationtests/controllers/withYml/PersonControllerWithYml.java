@@ -9,15 +9,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.EncoderConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +49,8 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
     @Test
     @Order(3)
     void findById() throws JsonProcessingException {
-        String content = given(specification)
+        var content = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+                ).spec(specification)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
@@ -54,16 +59,16 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .asString();
+                .as(PersonDTO.class, objectMapperToYaml);
 
-        PersonDTO result = objectMapperToYaml.readValue(content, PersonDTO.class);
-        assertEquals("Grasieli", result.getFirstName());
+        assertEquals("Grasieli", content.getFirstName());
     }
 
     @Test
     @Order(5)
     void findAll() throws JsonProcessingException {
-        String content = given(specification)
+        var content = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+                ).spec(specification)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .when()
                 .get()
@@ -71,11 +76,9 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .asString();
+                .as(PersonDTO[].class, objectMapperToYaml);
 
-        System.out.println(repository.findAll());
-
-        List<PersonDTO> people = objectMapperToYaml.readValue(content, new TypeReference<List<PersonDTO>>() {});
+        List<PersonDTO> people = Arrays.asList(content);
 
         assertTrue(people.size() == 1);
     }
@@ -93,18 +96,18 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
-        String content = given(specification)
+        var retorno = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+                ).spec(specification)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
-                .body(person)
+                .body(person, objectMapperToYaml)
                 .when()
                 .post()
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .asString();
+                .as(PersonDTO.class, objectMapperToYaml);
 
-        PersonDTO retorno = objectMapperToYaml.readValue(content, PersonDTO.class);
         person = retorno;
         assertTrue(retorno.getId() > 0);
 
@@ -115,19 +118,19 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
     void update() throws JsonProcessingException {
         person.setFirstName("Grasieli");
 
-        String content = given(specification)
+        var retorno = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+                ).spec(specification)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
-                .body(person)
+                .body(person, objectMapperToYaml)
                 .when()
                 .put("{id}")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .asString();
+                .as(PersonDTO.class, objectMapperToYaml);
 
-        PersonDTO retorno = objectMapperToYaml.readValue(content, PersonDTO.class);
         person = retorno;
         assertEquals("Grasieli", retorno.getFirstName());
     }
@@ -143,7 +146,8 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
-        String content = given(specification2)
+        var result = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+                ).spec(specification2)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
@@ -152,12 +156,24 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .asString();
+                .as(PersonDTO.class, objectMapperToYaml);
 
-        PersonDTO result = objectMapperToYaml.readValue(content, PersonDTO.class);
         person = result;
 
         assertFalse(result.getEnabled());
+    }
+
+    @Test
+    @Order(6)
+    void delete() throws JsonProcessingException{
+        var content = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+        ).spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .pathParam("id", person.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
     }
 
     private Map<String,String> header() {

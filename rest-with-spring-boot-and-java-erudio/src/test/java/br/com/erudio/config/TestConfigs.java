@@ -10,5 +10,5 @@ public interface TestConfigs {
     String MEDIATYPEJSON = "application/json";
     String CONTENT_TYPE = "Content-Type";
     String MEDIATYPEXML = "application/xml";
-    String MEDIATYPEYAML = "application/x-yaml";
+    String MEDIATYPEYAML = "application/yaml";
 }

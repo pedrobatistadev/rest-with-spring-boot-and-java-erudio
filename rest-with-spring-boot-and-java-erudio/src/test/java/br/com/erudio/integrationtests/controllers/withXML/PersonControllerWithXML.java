@@ -165,6 +165,18 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
         assertFalse(result.getEnabled());
     }
 
+    @Test
+    @Order(6)
+    void delete() throws JsonProcessingException {
+        var content = given(specification)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .pathParam("id", person.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
+    }
+
     private Map<String,String> header() {
         return Map.of(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB,
                 TestConfigs.ACCEPT,TestConfigs.MEDIATYPEXML);

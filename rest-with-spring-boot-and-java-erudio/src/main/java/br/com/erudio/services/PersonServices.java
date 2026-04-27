@@ -13,6 +13,9 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -33,14 +36,18 @@ public class PersonServices {
     @Autowired
     public PersonMapper personMap;
 
-    public List<PersonDTO> findAll() {
+    public Page<PersonDTO> findAll(Pageable page) {
         logger.warn("Finding all People!");
 
-        var entity = ObjectMapper.parseListObject(repository.findAll(), PersonDTO.class);
+        var people = repository.findAll(page);
 
-        entity.forEach(p -> Hateoas(p));
+        var peopleWithLinks = people.map((x) -> {
+            var dto = ObjectMapper.parseObject(x, PersonDTO.class);
+            Hateoas(dto);
+            return dto;
+        });
 
-        return entity;
+        return peopleWithLinks;
     }
 
     public PersonDTO findById(Long id) {

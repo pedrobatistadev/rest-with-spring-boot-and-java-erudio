@@ -4,6 +4,7 @@ import br.com.erudio.controllers.docs.PersonControllerDocs;
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.data.dto.v2.PersonDTOV2;
 import br.com.erudio.mapper.custom.PersonMapper;
+import br.com.erudio.model.Person;
 import br.com.erudio.services.PersonServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -40,10 +41,19 @@ public class PersonController implements PersonControllerDocs {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @Override
     public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(@RequestParam(value = "page", defaultValue = "1")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction) {
-        Integer pages = page--;
-        var sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(pages,size, Sort.by(sortDirection, "firstName"));
+        page--;
+        Sort.Direction sortDirection = direction(direction);
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, "id"));
         return ResponseEntity.ok(service.findAll(pageable));
+    }
+
+    @GetMapping(value = "/findByName/{firstName}",produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Override
+    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(@PathVariable String firstName, @RequestParam(value = "page", defaultValue = "1")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+        page--;
+        Sort.Direction sortDirection = direction(direction);
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, "id"));
+        return ResponseEntity.ok(service.findByName(firstName, pageable));
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
@@ -77,6 +87,10 @@ public class PersonController implements PersonControllerDocs {
     @PostMapping(value = "/v2",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     public PersonDTOV2 createV2(@RequestBody PersonDTOV2 person) {
         return service.createV2(person);
+    }
+
+    private Sort.Direction direction(String dir) {
+        return dir.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
     }
 
 }

@@ -2,11 +2,9 @@ package br.com.erudio.integrationtests.controllers.withJson;
 
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.dto.PersonDTO;
-import br.com.erudio.integrationtests.dto.wrappers.WrapperPersonDTO;
+import br.com.erudio.integrationtests.dto.wrappers.json.WrapperPersonDTO;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
-import br.com.erudio.model.Person;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -15,12 +13,9 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
-import org.mockito.junit.MockitoJUnit;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import javax.print.attribute.standard.Media;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -153,6 +148,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
     void findAll() throws JsonProcessingException {
         String content = given(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("page", 3, "size", 12, "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -163,6 +159,10 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
 
         WrapperPersonDTO people = objectMapper.readValue(content, WrapperPersonDTO.class);
         List<PersonDTO> result = people.getEmbedded().getPeople();
+
+        PersonDTO personOne = result.get(0);
+
+        assertEquals("Mei", personOne.getFirstName());
 
         assertNotNull(result);
 

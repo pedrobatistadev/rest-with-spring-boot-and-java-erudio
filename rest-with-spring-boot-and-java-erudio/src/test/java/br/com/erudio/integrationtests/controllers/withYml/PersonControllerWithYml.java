@@ -3,6 +3,7 @@ package br.com.erudio.integrationtests.controllers.withYml;
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.controllers.withYml.mapper.YAMLMapper;
 import br.com.erudio.integrationtests.dto.PersonDTO;
+import br.com.erudio.integrationtests.dto.wrappers.xml.PagedModelXML;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.erudio.repository.PersonRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -76,11 +77,13 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(PersonDTO[].class, objectMapperToYaml);
+                .as(PagedModelXML.class, objectMapperToYaml);
 
-        List<PersonDTO> people = Arrays.asList(content);
+        List<PersonDTO> people = content.getContent();
 
-        assertTrue(people.size() == 1);
+        PersonDTO dto = people.get(0);
+
+        assertEquals("Christy", dto.getFirstName());
     }
 
     @Test

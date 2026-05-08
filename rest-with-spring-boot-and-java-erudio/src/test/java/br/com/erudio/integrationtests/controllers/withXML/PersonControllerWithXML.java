@@ -2,6 +2,7 @@ package br.com.erudio.integrationtests.controllers.withXML;
 
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.dto.PersonDTO;
+import br.com.erudio.integrationtests.dto.wrappers.xml.PagedModelXML;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
@@ -70,6 +71,7 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
     void findAll() throws JsonProcessingException {
         String content = given(specification)
                 .contentType(MediaType.APPLICATION_XML_VALUE)
+                .queryParam("page", 3, "size", 12, "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -78,11 +80,13 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        System.out.println(repository.findAll());
+        PagedModelXML xml = objectMapperToXML.readValue(content, PagedModelXML.class);
 
-        List<PersonDTO> people = objectMapperToXML.readValue(content, new TypeReference<List<PersonDTO>>() {});
+        List<PersonDTO> people = xml.getContent();
 
-        assertTrue(people.size() == 1);
+        PersonDTO personOne = people.get(0);
+
+        assertEquals("Mei", personOne.getFirstName());
     }
 
     @Test

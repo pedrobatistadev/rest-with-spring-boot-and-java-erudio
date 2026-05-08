@@ -52,7 +52,7 @@ public class PersonServices {
         });
 
         Link findAllLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PersonController.class)
-                .findAll(page.getPageNumber() + 1, page.getPageSize(), String.valueOf(page.getSort()))).withSelfRel();
+                .findAll(page.getPageNumber(), page.getPageSize(), String.valueOf(page.getSort()))).withSelfRel();
 
         return assembler.toModel(peopleWithLinks, findAllLink);
     }
@@ -69,7 +69,7 @@ public class PersonServices {
         });
 
         Link findAllLink = linkTo(methodOn(PersonController.class)
-                .findByName(firstName,page.getPageNumber() + 1, page.getPageSize(), String.valueOf(page.getSort()))).withSelfRel();
+                .findByName(firstName,page.getPageNumber(), page.getPageSize(), String.valueOf(page.getSort()))).withSelfRel();
 
         return assembler.toModel(peopleWithLinks, findAllLink);
     }

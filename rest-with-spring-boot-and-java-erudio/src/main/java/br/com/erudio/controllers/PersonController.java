@@ -38,10 +38,9 @@ public class PersonController implements PersonControllerDocs {
         return service.findById(id);
     }
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
-    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(@RequestParam(value = "page", defaultValue = "1")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction) {
-        page--;
+    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(@RequestParam(value = "page", defaultValue = "0")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction) {
         Sort.Direction sortDirection = direction(direction);
         Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, "id"));
         return ResponseEntity.ok(service.findAll(pageable));
@@ -50,7 +49,6 @@ public class PersonController implements PersonControllerDocs {
     @GetMapping(value = "/findByName/{firstName}",produces = {MediaType.APPLICATION_JSON_VALUE})
     @Override
     public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(@PathVariable String firstName, @RequestParam(value = "page", defaultValue = "1")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction) {
-        page--;
         Sort.Direction sortDirection = direction(direction);
         Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection, "id"));
         return ResponseEntity.ok(service.findByName(firstName, pageable));

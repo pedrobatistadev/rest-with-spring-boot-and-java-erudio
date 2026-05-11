@@ -13,3 +13,4 @@ Docker, <br>
 Rest-assured,<br>
 TestContainer,<br>
 Cross-Origin Resource Sharing para WebSecurity.<br>
+Query Params e Paginação + HAL

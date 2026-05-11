@@ -170,6 +170,31 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
 
     @Test
     @Order(6)
+    void findByName() throws JsonProcessingException {
+        String content = given(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParam("firstName", "and")
+                .queryParams(page())
+                .when()
+                .get("/findByName/{firstName}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        WrapperPersonDTO dto = objectMapper.readValue(content, WrapperPersonDTO.class);
+        List<PersonDTO> result = dto.getEmbedded().getPeople();
+
+        PersonDTO self = result.get(0);
+
+        assertNotNull(self);
+        assertEquals("Amandie", self.getFirstName());
+
+    }
+
+    @Test
+    @Order(7)
     void delete() throws JsonProcessingException {
         var content = given(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -193,5 +218,11 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
                 TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB,
                 TestConfigs.ACCEPT, TestConfigs.MEDIATYPEJSON
         );
+    }
+
+    private Map<String,Object> page() {
+        return Map.of("page",0,
+                "size",12,
+                "direction","asc");
     }
 }

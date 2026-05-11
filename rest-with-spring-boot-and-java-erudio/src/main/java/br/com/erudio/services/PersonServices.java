@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -62,7 +63,7 @@ public class PersonServices {
 
         var people = repository.findByName(firstName, page);
 
-        var peopleWithLinks = people.map((x) -> {
+        Page<PersonDTO> peopleWithLinks = people.map((x) -> {
             PersonDTO dto = ObjectMapper.parseObject(x, PersonDTO.class);
             Hateoas(dto);
             return dto;

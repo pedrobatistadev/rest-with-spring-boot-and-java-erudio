@@ -13,7 +13,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Person p SET p.enabled = false WHERE p.id = :id")
-    public void disablePerson(@Param("id") Long id);
+    public void disablePerson(@Param("id") Long x);
 
     @Query("SELECT p FROM Person p WHERE p.firstName LIKE LOWER(CONCAT('%', :firstName, '%'))")
     public Page<Person> findByName(@Param("firstName") String firstName, Pageable pageable);

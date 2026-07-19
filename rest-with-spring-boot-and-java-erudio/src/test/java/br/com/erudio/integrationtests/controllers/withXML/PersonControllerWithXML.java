@@ -67,7 +67,7 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     void findAll() throws JsonProcessingException {
         String content = given(specification)
                 .contentType(MediaType.APPLICATION_XML_VALUE)
@@ -87,6 +87,29 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
         PersonDTO personOne = people.get(0);
 
         assertEquals("Mei", personOne.getFirstName());
+    }
+
+
+    @Test
+    @Order(5)
+    void findByName() throws JsonProcessingException {
+        String content = given(specification)
+                .queryParam("page", 0, "size", 12, "direction", "asc")
+                .when()
+                .get("/findByName/and")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        PagedModelXML xml = objectMapperToXML.readValue(content, PagedModelXML.class);
+
+        List<PersonDTO> people = xml.getContent();
+
+        PersonDTO one = people.get(0);
+
+        assertEquals("Amandie",one.getFirstName());
     }
 
     @Test

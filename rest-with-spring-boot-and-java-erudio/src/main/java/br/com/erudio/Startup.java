@@ -1,7 +1,5 @@
 package br.com.erudio;
 
-import br.com.erudio.repository.PersonRepository;
-import br.com.erudio.serialization.converter.YamJackson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

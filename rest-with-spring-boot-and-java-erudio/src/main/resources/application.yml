@@ -1,5 +1,7 @@
 cors:
   originPatterns: https://github.com/pedrobatistadev
+file:
+  upload-dir: /Users/pedro/Documentos/UploadDir
 spring:
   application:
     name: rest-with-spring-boot-and-java-erudio
@@ -15,6 +17,12 @@ spring:
       hibernate:
     show-sql: false
     open-in-view: false
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshould: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
 logging:
   level:
     root: INFO

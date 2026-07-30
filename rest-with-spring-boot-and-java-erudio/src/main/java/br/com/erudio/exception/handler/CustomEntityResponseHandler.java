@@ -1,9 +1,7 @@
 package br.com.erudio.exception.handler;
 
 
-import br.com.erudio.exception.ExceptionResponse;
-import br.com.erudio.exception.RequiredObjectNullException;
-import br.com.erudio.exception.ResourceNotFoundException;
+import br.com.erudio.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,6 +27,14 @@ public class CustomEntityResponseHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handlerRequiredObjectException(Exception ex, WebRequest request) {
+        String data = sdf.format(new Date());
+        ExceptionResponse response = new ExceptionResponse(data, ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
     public final ResponseEntity<ExceptionResponse> handlerBadRequestException(Exception ex, WebRequest request) {
         String data = sdf.format(new Date());
         ExceptionResponse response = new ExceptionResponse(data, ex.getMessage(), request.getDescription(false));
@@ -42,6 +48,22 @@ public class CustomEntityResponseHandler {
         ExceptionResponse response = new ExceptionResponse(data, ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public final ResponseEntity<ExceptionResponse> handlerFileStorageException(Exception ex, WebRequest request) {
+        String data = sdf.format(new Date());
+        ExceptionResponse response = new ExceptionResponse(data, ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handlerFileNotFoundException(Exception ex, WebRequest request) {
+        String data = sdf.format(new Date());
+        ExceptionResponse response = new ExceptionResponse(data, ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
 

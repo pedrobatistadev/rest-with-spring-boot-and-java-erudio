@@ -14,3 +14,6 @@ Rest-assured,<br>
 TestContainer,<br>
 Cross-Origin Resource Sharing para WebSecurity.<br>
 Query Params e Paginação + HAL
+Upload e Download de arquivos
+Importação e Exportação de Planilhas Excel e CSV
+JasperReports

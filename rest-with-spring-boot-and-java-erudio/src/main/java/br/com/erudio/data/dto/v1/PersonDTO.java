@@ -118,6 +118,10 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.enabled = enabled;
     }
 
+    public String getName() {
+        return (this.firstName != null ? this.firstName : "") + (this.lastName != null ? " " + this.lastName : "");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PersonDTO personDTO)) return false;

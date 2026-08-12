@@ -7,6 +7,8 @@ import br.com.erudio.exception.BadRequestException;
 import br.com.erudio.exception.FileStorageException;
 import br.com.erudio.exception.RequiredObjectNullException;
 import br.com.erudio.exception.ResourceNotFoundException;
+import br.com.erudio.file.exporter.contract.FileExporter;
+import br.com.erudio.file.exporter.factory.FileExporterFactory;
 import br.com.erudio.file.importer.contract.FileImporter;
 import br.com.erudio.file.importer.factory.FileImporterFactory;
 import br.com.erudio.mapper.ObjectMapper;
@@ -17,6 +19,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -51,6 +54,9 @@ public class PersonServices {
     public FileImporterFactory importer;
 
     @Autowired
+    public FileExporterFactory exporter;
+
+    @Autowired
     PagedResourcesAssembler<PersonDTO> assembler;
 
     public PagedModel<EntityModel<PersonDTO>> findAll(Pageable page) {
@@ -59,6 +65,19 @@ public class PersonServices {
         var people = repository.findAll(page);
 
         return buildPagedModel(page, people);
+    }
+
+    public Resource exportFile(Pageable page, String acceptHeader) {
+        logger.warn("Finding all People!");
+
+        var people = repository.findAll(page).map((x) -> ObjectMapper.parseObject(x, PersonDTO.class)).getContent();
+
+        try {
+            FileExporter exporter = this.exporter.getExporter(acceptHeader);
+            return exporter.exportFile(people);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during file export !");
+        }
     }
 
     public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable page) {
@@ -126,6 +145,7 @@ public class PersonServices {
         }
     }
 
+
     public PersonDTO update(PersonDTO person, Long id) {
         if (id == null || person == null) {
             throw new RequiredObjectNullException();
@@ -192,6 +212,7 @@ public class PersonServices {
         result.add(linkTo(methodOn(PersonController.class).update(result, result.getId())).withRel("update").withType("PUT"));
         result.add(linkTo(methodOn(PersonController.class).disablePerson(result.getId())).withRel("disable").withType("PATCH"));
         result.add(linkTo(methodOn(PersonController.class).delete(result.getId())).withRel("delete").withType("DELETE"));
+        result.add(linkTo(methodOn(PersonController.class).exportPage(1,12,"asc",null)).withRel("exportPage").withType("GET").withTitle("Export People"));
     }
 
     private PagedModel<EntityModel<PersonDTO>> buildPagedModel(Pageable page, Page<Person> people) {

@@ -10,7 +10,7 @@
 	<query language="SQL"><![CDATA[SELECT 
 	id,
 	CONCAT(first_name, ' ' ,last_name) AS name,
-	adress,
+	address,
 	gender,
 	enabled
 FROM rest_with_spring_boot_erudio.person]]></query>
@@ -23,9 +23,9 @@ FROM rest_with_spring_boot_erudio.person]]></query>
 		<property name="com.jaspersoft.studio.field.name" value="name"/>
 		<property name="com.jaspersoft.studio.field.label" value="name"/>
 	</field>
-	<field name="adress" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="adress"/>
-		<property name="com.jaspersoft.studio.field.label" value="adress"/>
+	<field name="address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="address"/>
+		<property name="com.jaspersoft.studio.field.label" value="address"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="person"/>
 	</field>
 	<field name="gender" class="java.lang.String">
@@ -85,7 +85,7 @@ FROM rest_with_spring_boot_erudio.person]]></query>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d4477834-4080-413e-8822-f77f603381e5"/>
 			</element>
 			<element kind="textField" uuid="d0015501-48ed-47a0-aa13-b611fbb01987" mode="Opaque" x="260" y="0" width="100" height="30" forecolor="#050505" linkType="None" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle" style="zebraStyle">
-				<expression><![CDATA[$F{adress}]]></expression>
+				<expression><![CDATA[$F{address}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e51dbfb4-735e-4985-83cd-e5224d3fb814"/>
 			</element>
 			<element kind="textField" uuid="92f08bf8-934d-496f-9844-b18494a88e7b" mode="Opaque" x="360" y="0" width="100" height="30" forecolor="#050505" linkType="None" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle" style="zebraStyle">

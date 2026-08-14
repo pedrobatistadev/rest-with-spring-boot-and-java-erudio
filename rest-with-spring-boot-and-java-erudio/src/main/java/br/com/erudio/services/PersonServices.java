@@ -76,7 +76,7 @@ public class PersonServices {
             FileExporter exporter = this.exporter.getExporter(acceptHeader);
             return exporter.exportFile(people);
         } catch (Exception e) {
-            throw new RuntimeException("Error during file export !");
+            throw new RuntimeException("Error during file export !", e);
         }
     }
 
@@ -208,7 +208,7 @@ public class PersonServices {
     private static void Hateoas(PersonDTO result) {
         result.add(linkTo(methodOn(PersonController.class).findById(result.getId())).withSelfRel().withType("GET"));
         result.add(linkTo(methodOn(PersonController.class).create(result)).withRel("create").withType("POST"));
-        result.add(linkTo(methodOn(PersonController.class)).slash("massCreation").withRel("massCreation").withRel("POST"));
+        result.add(linkTo(methodOn(PersonController.class)).slash("massCreation").withRel("massCreation").withType("POST"));
         result.add(linkTo(methodOn(PersonController.class).update(result, result.getId())).withRel("update").withType("PUT"));
         result.add(linkTo(methodOn(PersonController.class).disablePerson(result.getId())).withRel("disable").withType("PATCH"));
         result.add(linkTo(methodOn(PersonController.class).delete(result.getId())).withRel("delete").withType("DELETE"));

@@ -43,7 +43,7 @@ public class PersonController implements PersonControllerDocs {
         return ResponseEntity.ok(service.findAll(pageable));
     }
 
-    @GetMapping(value = "/exportPage", produces = {MediaTypes.APPLICATION_CSV_VALUE, MediaTypes.APPLICATION_XLSX_VALUE, MediaTypes.APPLICATION_PDF_VALUE})
+    @GetMapping(value = "/export/page", produces = {MediaTypes.APPLICATION_CSV_VALUE, MediaTypes.APPLICATION_XLSX_VALUE, MediaTypes.APPLICATION_PDF_VALUE})
     @Override
     public ResponseEntity<Resource> exportPage(@RequestParam(value = "page", defaultValue = "0")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction, HttpServletRequest request) {
         Sort.Direction sortDirection = direction(direction);

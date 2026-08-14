@@ -12,5 +12,8 @@ Swagger OpenAPI, <br>
 Docker, <br>
 Rest-assured,<br>
 TestContainer,<br>
-Cross-Origin Resource Sharing para WebSecurity.<br>
-Query Params e Paginação + HAL
+Cross-Origin Resource Sharing, <br>
+Query Params e Paginação + HAL, <br>
+Upload e Download de arquivos, <br> 
+Importação e Exportação de Planilhas Excel e CSV, <br>
+JasperReports <br>

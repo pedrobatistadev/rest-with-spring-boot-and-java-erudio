@@ -28,7 +28,7 @@ logging:
     root: INFO
     #br.com.erudio: WARN
 spring-doc:
-  paths-to-match: /person/v1/**
+  paths-to-match: /**
   swagger-ui:
     use-root-path: true
 

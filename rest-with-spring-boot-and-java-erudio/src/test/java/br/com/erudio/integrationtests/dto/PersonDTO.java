@@ -1,11 +1,14 @@
 package br.com.erudio.integrationtests.dto;
+import br.com.erudio.model.Book;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import jakarta.persistence.Column;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import javax.swing.text.StyledEditorKit;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @XmlRootElement
@@ -29,6 +32,12 @@ public class PersonDTO implements Serializable {
     private String gender;
 
     private Boolean enabled;
+
+    private String profileUrl;
+
+    private String photoUrl;
+
+    private List<Book> books;
 
     public PersonDTO() {}
 
@@ -104,6 +113,30 @@ public class PersonDTO implements Serializable {
         this.enabled = enabled;
     }
 
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
     @Override
     public String toString() {
         return "PersonDTO{" +
@@ -122,11 +155,11 @@ public class PersonDTO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PersonDTO personDTO)) return false;
-        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(password, personDTO.password) && Objects.equals(gender, personDTO.gender) && Objects.equals(enabled, personDTO.enabled);
+        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(password, personDTO.password) && Objects.equals(gender, personDTO.gender) && Objects.equals(enabled, personDTO.enabled) && Objects.equals(profileUrl, personDTO.profileUrl) && Objects.equals(photoUrl, personDTO.photoUrl) && Objects.equals(books, personDTO.books);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, birthDay, address, password, gender, enabled);
+        return Objects.hash(id, firstName, lastName, phoneNumber, birthDay, address, password, gender, enabled, profileUrl, photoUrl, books);
     }
 }

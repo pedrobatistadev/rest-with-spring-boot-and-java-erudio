@@ -50,6 +50,12 @@ public class XlsxExporter implements FileExporter {
         }
     }
 
+    @Override
+    public Resource exportPerson(PersonDTO people) throws Exception {
+        return null;
+    }
+
+
     private CellStyle createHeaderCellStyle(Workbook workbook) {
          CellStyle style = workbook.createCellStyle();
          Font font = workbook.createFont();

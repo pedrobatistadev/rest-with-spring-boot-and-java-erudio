@@ -7,7 +7,7 @@
 			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
 		</conditionalStyle>
 	</style>
-	<query language="SQL"></query>
+	<query language="SQL"><![CDATA[]]></query>
 	<field name="id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
 		<property name="com.jaspersoft.studio.field.label" value="id"/>
@@ -37,7 +37,7 @@
 		<element kind="staticText" uuid="d9d2a640-c6da-4b5a-8cf7-11a76a22f6ee" x="16" y="10" width="555" height="68" fontSize="40.0" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[PEOPLE REPORT]]></text>
 		</element>
-		<element kind="image" uuid="d387af40-ef85-4202-890c-9bfaf399086e" x="40" y="11" width="50" height="68">
+		<element kind="image" uuid="d387af40-ef85-4202-890c-9bfaf399086e" x="40" y="11" width="50" height="49">
 			<expression><![CDATA["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAQ0lut6bOxQ67PMKVHszFkT9VLjawfpjHSly2AWipAQ&s=10"]]></expression>
 		</element>
 	</title>

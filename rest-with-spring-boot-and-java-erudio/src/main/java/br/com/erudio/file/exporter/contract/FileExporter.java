@@ -10,4 +10,6 @@ import java.util.List;
 public interface FileExporter {
 
     Resource exportFile(List<PersonDTO> people) throws Exception;
+
+    Resource exportPerson(PersonDTO people) throws Exception;
 }

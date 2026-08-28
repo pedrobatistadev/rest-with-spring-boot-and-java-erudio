@@ -22,7 +22,7 @@ public class Book implements Serializable {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "Launch_date", nullable = false)
-    private Date launch_date;
+    private Date launchDate;
 
     @Column(name = "Price", nullable = false)
     private Double price;
@@ -49,12 +49,12 @@ public class Book implements Serializable {
         this.author = author;
     }
 
-    public Date getLaunch_date() {
-        return launch_date;
+    public Date getLaunchDate() {
+        return launchDate;
     }
 
-    public void setLaunch_date(Date launch_date) {
-        this.launch_date = launch_date;
+    public void setLaunchDate(Date launchDate) {
+        this.launchDate = launchDate;
     }
 
     public Double getPrice() {
@@ -76,11 +76,11 @@ public class Book implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Book book)) return false;
-        return Objects.equals(id, book.id) && Objects.equals(author, book.author) && Objects.equals(launch_date, book.launch_date) && Objects.equals(price, book.price) && Objects.equals(title, book.title);
+        return Objects.equals(id, book.id) && Objects.equals(author, book.author) && Objects.equals(launchDate, book.launchDate) && Objects.equals(price, book.price) && Objects.equals(title, book.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, launch_date, price, title);
+        return Objects.hash(id, author, launchDate, price, title);
     }
 }

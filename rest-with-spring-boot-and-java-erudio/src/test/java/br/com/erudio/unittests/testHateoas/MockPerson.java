@@ -22,7 +22,7 @@ public class MockPerson {
     public PersonDTO mockDTO (Long number) {
         PersonDTO dto = new PersonDTO();
         dto.setId(number);
-        dto.setAddress("Adress testdto" + number);
+        dto.setAddress("Address testdto" + number);
         dto.setFirstName("First name testdto" + number);
         dto.setGender((number % 2 == 0) ? "Male" : "Female");
         dto.setLastName("Last name testdto" + number);

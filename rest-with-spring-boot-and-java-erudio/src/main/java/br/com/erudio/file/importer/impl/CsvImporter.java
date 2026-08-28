@@ -35,7 +35,7 @@ public class CsvImporter implements FileImporter {
             PersonDTO person = new PersonDTO();
             person.setFirstName(reco.get("first_name"));
             person.setLastName(reco.get("last_name"));
-            person.setAddress("address");
+            person.setAddress("adress");
             person.setGender("gender");
             person.setEnabled(true);
             dto.add(person);

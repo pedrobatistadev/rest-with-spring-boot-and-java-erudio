@@ -5,6 +5,7 @@
 	<parameter name="PERSON_ID" class="java.lang.Long"/>
 	<parameter name="SUB_REPORT_DATA_SOURCE" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="QR_CODEIMAGE" class="java.io.InputStream"/>
+	<parameter name="SUB_REPORT_DIR" class="java.lang.String"/>
 	<query language="SQL"><![CDATA[SELECT id,
 	CONCAT(first_name, '' ,	last_name) AS name,
 	adress,
@@ -24,9 +25,9 @@ WHERE id = $P{PERSON_ID}
 		<property name="com.jaspersoft.studio.field.name" value="name"/>
 		<property name="com.jaspersoft.studio.field.label" value="name"/>
 	</field>
-	<field name="adress" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="adress"/>
-		<property name="com.jaspersoft.studio.field.label" value="adress"/>
+	<field name="address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="address"/>
+		<property name="com.jaspersoft.studio.field.label" value="address"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="person"/>
 	</field>
 	<field name="gender" class="java.lang.String">
@@ -79,11 +80,11 @@ WHERE id = $P{PERSON_ID}
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="38b9e6a1-f753-4f82-a6a7-a6be4c0747ce"/>
 		</element>
 		<element kind="staticText" uuid="69ac107e-60f7-4d72-b449-51a79633951e" x="10" y="160" width="40" height="30" fontSize="12.0" bold="true" vTextAlign="Middle">
-			<text><![CDATA[Adress:]]></text>
+			<text><![CDATA[Address:]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="abbdc42a-749d-4d47-9f20-9dc736d015b2"/>
 		</element>
 		<element kind="textField" uuid="eefb8ac8-b761-4cc6-9be4-c2346e4c8de0" x="50" y="160" width="170" height="30" fontSize="12.0" vTextAlign="Middle">
-			<expression><![CDATA[$F{adress}]]></expression>
+			<expression><![CDATA[$F{address}]]></expression>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="abbdc42a-749d-4d47-9f20-9dc736d015b2"/>
 		</element>
 		<element kind="image" uuid="1c6b576e-9ef8-46e4-aa7f-93527ddaa7ee" x="430" y="30" width="115" height="120">
@@ -96,8 +97,8 @@ WHERE id = $P{PERSON_ID}
 	<detail>
 		<band height="165" splitType="Stretch">
 			<element kind="subreport" uuid="059f0ed4-edae-44c9-9eac-927ee0f0c187" x="10" y="0" width="535" height="150">
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<expression><![CDATA["books.jasper"]]></expression>
+				<dataSourceExpression><![CDATA[$P{SUB_REPORT_DATA_SOURCE}]]></dataSourceExpression>
+				<expression><![CDATA[$P{SUB_REPORT_DIR}]]></expression>
 				<parameter name="PERSON_ID">
 					<expression><![CDATA[$P{PERSON_ID}]]></expression>
 				</parameter>

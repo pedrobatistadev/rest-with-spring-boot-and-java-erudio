@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.util.List;
 
-public interface FileExporter {
+public interface PersonExporter {
 
-    Resource exportFile(List<PersonDTO> people) throws Exception;
+    Resource exportPeople(List<PersonDTO> people) throws Exception;
 
     Resource exportPerson(PersonDTO people) throws Exception;
 }

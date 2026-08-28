@@ -47,7 +47,7 @@ public class BookService {
         Book db = repository.findById(book.getId()).orElse(null);
 
         db.setAuthor(book.getAuthor());
-        db.setLaunch_date(book.getLaunch_date());
+        db.setLaunchDate(book.getLaunch_date());
         db.setPrice(book.getPrice());
         db.setTitle(book.getTitle());
 

@@ -5,13 +5,7 @@ package br.com.erudio.data.dto.v1;
 //import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import br.com.erudio.model.Book;
-import br.com.erudio.serializer.GenderSerializer;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.persistence.Column;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 

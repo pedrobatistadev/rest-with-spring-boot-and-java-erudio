@@ -26,6 +26,7 @@ spring:
 logging:
   level:
     root: INFO
+    #net.sf.jasperreports.engine.*: TRACE
     #br.com.erudio: WARN
 spring-doc:
   paths-to-match: /**

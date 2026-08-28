@@ -7,7 +7,7 @@ import br.com.erudio.exception.BadRequestException;
 import br.com.erudio.exception.FileStorageException;
 import br.com.erudio.exception.RequiredObjectNullException;
 import br.com.erudio.exception.ResourceNotFoundException;
-import br.com.erudio.file.exporter.contract.FileExporter;
+import br.com.erudio.file.exporter.contract.PersonExporter;
 import br.com.erudio.file.exporter.factory.FileExporterFactory;
 import br.com.erudio.file.importer.contract.FileImporter;
 import br.com.erudio.file.importer.factory.FileImporterFactory;
@@ -73,8 +73,8 @@ public class PersonServices {
         var people = repository.findAll(page).map((x) -> ObjectMapper.parseObject(x, PersonDTO.class)).getContent();
 
         try {
-            FileExporter exporter = this.exporter.getExporter(acceptHeader);
-            return exporter.exportFile(people);
+            PersonExporter exporter = this.exporter.getExporter(acceptHeader);
+            return exporter.exportPeople(people);
         } catch (Exception e) {
             throw new RuntimeException("Error during file export !", e);
         }
@@ -86,6 +86,19 @@ public class PersonServices {
         var people = repository.findByName(firstName, page);
 
         return buildPagedModel(page, people);
+    }
+
+    public Resource exportPerson(Long id, String acceptHeader) {
+        logger.warn("Exporting data of one Person!");
+
+        var person = repository.findById(id).map((entity) -> ObjectMapper.parseObject(entity, PersonDTO.class)).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+
+        try {
+            PersonExporter exporter = this.exporter.getExporter(acceptHeader);
+            return exporter.exportPerson(person);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during file export!", e);
+        }
     }
 
     public PersonDTO findById(Long id) {

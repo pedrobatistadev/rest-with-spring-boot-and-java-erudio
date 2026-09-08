@@ -4,6 +4,9 @@ cors:
   originPatterns: http://localhost:8080,https://github.com/pedrobatistadev
 file:
   upload-dir: /Users/pedro/Documentos/UploadDir
+  email:
+    subject: "Default Subject"
+    message: "Default Message"
 spring:
   application:
     name: rest-with-spring-boot-and-java-erudio
@@ -16,10 +19,19 @@ spring:
       hibernate:
     show-sql: false
     open-in-view: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enabled: true
+      mail.smtp.starttls.required: true
   servlet:
     multipart:
       enabled: true
-      file-size-threshould: 2KB
+      file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
 logging:

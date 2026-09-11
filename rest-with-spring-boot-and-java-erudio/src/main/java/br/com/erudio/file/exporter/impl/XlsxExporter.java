@@ -20,7 +20,7 @@ public class XlsxExporter implements PersonExporter {
             Sheet sheet = workbook.createSheet("People");
 
             Row headerRow = sheet.createRow(0);
-            String[] headers = {"ID", "First Name", "Last Name", "Addres", "Gender", "Enabled"};
+            String[] headers = {"ID", "First Name", "Last Name", "Address", "Gender", "Enabled"};
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);

@@ -48,7 +48,7 @@ public class FileController implements FileControllerDocs {
         return Arrays.asList(files).stream().map( (x) -> uploadFile(x)).collect(Collectors.toList());
     }
 
-    @GetMapping("downloadFile/{fileName:.+}")
+    @GetMapping("/downloadFile/{fileName:.+}")
     @Override
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = service.loadFileAsResource(fileName);
@@ -63,6 +63,7 @@ public class FileController implements FileControllerDocs {
             contentType = "application/octet-stream";
         }
 
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
     }
 }

@@ -29,23 +29,6 @@ public class PersonController implements PersonControllerDocs {
     @Autowired
     public PersonServices service;
 
-    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    @Override
-    public PersonDTO findById(@PathVariable("id") Long id) {
-        return service.findById(id);
-    }
-
-    @GetMapping(value = "/export/{id}", produces = {MediaType.APPLICATION_PDF_VALUE})
-    @Override
-    public ResponseEntity<Resource> export(@PathVariable Long id, HttpServletRequest request) {
-        String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
-
-        Resource file = service.exportPerson(id, acceptHeader);
-
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(acceptHeader))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=person.pdf").body(file);
-    }
-
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
     public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(@RequestParam(value = "page", defaultValue = "0")Integer page, @RequestParam(value = "size", defaultValue = "12") Integer size, @RequestParam(value = "direction", defaultValue = "asc") String direction) {
@@ -70,18 +53,13 @@ public class PersonController implements PersonControllerDocs {
                 MediaTypes.APPLICATION_PDF_VALUE, ".pdf"
         );
 
-        String fileExtension = extensionsMap.getOrDefault(acceptHeader, "");
         String contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
+        String fileExtension = extensionsMap.getOrDefault(acceptHeader, "");
+
         var filename = "people_exported" + fileExtension;
 
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + filename + "\"").body(file);
-    }
-
-    @PostMapping(value = "/massCreation", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    @Override
-    public List<PersonDTO> massCreation(@RequestParam("file") MultipartFile file) {
-        return service.massCreation(file);
     }
 
     @GetMapping(value = "/findByName/{firstName}",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
@@ -92,10 +70,22 @@ public class PersonController implements PersonControllerDocs {
         return ResponseEntity.ok(service.findByName(firstName, pageable));
     }
 
+    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Override
+    public PersonDTO findById(@PathVariable("id") Long id) {
+        return service.findById(id);
+    }
+
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
+    }
+
+    @PostMapping(value = "/massCreation", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Override
+    public List<PersonDTO> massCreation(@RequestParam("file") MultipartFile file) {
+        return service.massCreation(file);
     }
 
     @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
@@ -116,6 +106,17 @@ public class PersonController implements PersonControllerDocs {
         service.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/export/{id}", produces = {MediaType.APPLICATION_PDF_VALUE})
+    @Override
+    public ResponseEntity<Resource> export(@PathVariable Long id, HttpServletRequest request) {
+        String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+
+        Resource file = service.exportPerson(id, acceptHeader);
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(acceptHeader))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=person.pdf").body(file);
     }
 
     // -- Version 2 --

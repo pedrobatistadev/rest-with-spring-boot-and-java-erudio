@@ -23,7 +23,7 @@ public class CsvExporter implements PersonExporter {
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
 
         CSVFormat csvFormat = CSVFormat.Builder.create()
-                .setHeader("ID", "First Name", "Last Name", "Addres", "Gender", "Enabled")
+                .setHeader("ID", "First Name", "Last Name", "Address", "Gender", "Enabled")
                 .setSkipHeaderRecord(false)
                 .build();
 

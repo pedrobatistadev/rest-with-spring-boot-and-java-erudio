@@ -43,5 +43,6 @@ logging:
 spring-doc:
   paths-to-match: /**
   swagger-ui:
-    use-root-path: true
+    path: /swagger
+#    use-root-path: true
 

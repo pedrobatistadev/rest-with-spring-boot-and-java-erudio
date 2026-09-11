@@ -28,15 +28,15 @@ public class CsvImporter implements FileImporter {
         return parseRecordsToPersonDTOs(record);
     }
 
-    private List<PersonDTO> parseRecordsToPersonDTOs(Iterable<CSVRecord> record) {
+    private List<PersonDTO> parseRecordsToPersonDTOs(Iterable<CSVRecord> records) {
         List<PersonDTO> dto = new ArrayList<>();
 
-        for (CSVRecord reco : record) {
+        for (CSVRecord record : records) {
             PersonDTO person = new PersonDTO();
-            person.setFirstName(reco.get("first_name"));
-            person.setLastName(reco.get("last_name"));
-            person.setAddress("adress");
-            person.setGender("gender");
+            person.setFirstName(record.get("first_name"));
+            person.setLastName(record.get("last_name"));
+            person.setAddress(record.get("address"));
+            person.setGender(record.get("gender"));
             person.setEnabled(true);
             dto.add(person);
         }

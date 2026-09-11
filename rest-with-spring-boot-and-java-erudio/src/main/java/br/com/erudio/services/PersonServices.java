@@ -63,14 +63,20 @@ public class PersonServices {
         logger.warn("Finding all People!");
 
         var people = repository.findAll(page);
+        return buildPagedModel(page, people);
+    }
 
+    public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable page) {
+        logger.warn("Finding People by Name!");
+
+        var people = repository.findByName(firstName, page);
         return buildPagedModel(page, people);
     }
 
     public Resource exportFile(Pageable page, String acceptHeader) {
         logger.warn("Finding all People!");
 
-        var people = repository.findAll(page).map((x) -> ObjectMapper.parseObject(x, PersonDTO.class)).getContent();
+        var people = repository.findAll(page).map((person) -> ObjectMapper.parseObject(person, PersonDTO.class)).getContent();
 
         try {
             PersonExporter exporter = this.exporter.getExporter(acceptHeader);
@@ -78,14 +84,6 @@ public class PersonServices {
         } catch (Exception e) {
             throw new RuntimeException("Error during file export !", e);
         }
-    }
-
-    public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable page) {
-        logger.warn("Finding People by Name!");
-
-        var people = repository.findByName(firstName, page);
-
-        return buildPagedModel(page, people);
     }
 
     public Resource exportPerson(Long id, String acceptHeader) {
@@ -107,13 +105,9 @@ public class PersonServices {
         }
         logger.warn("Finding one Person!");
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
         var result = parseObject(entity, PersonDTO.class);
-        result.setBirthDay(new Date());
-        result.setPassword("pedro123");
-        //result.setPhoneNumber("(44) 99931-3342");
-
         Hateoas(result);
 
         return result;
@@ -126,11 +120,8 @@ public class PersonServices {
         logger.warn("Creating Person");
 
         var entity = parseObject(person, Person.class);
-
         var hate = parseObject(repository.save(entity), PersonDTO.class);
-
         Hateoas(hate);
-
         return hate;
 
     }
@@ -147,8 +138,8 @@ public class PersonServices {
             List<Person> entities = importer.importFile(inputStream).stream()
                     .map(dto -> repository.save(parseObject(dto, Person.class))).toList();
 
-            return entities.stream().map((x) -> {
-                PersonDTO dto = ObjectMapper.parseObject(x, PersonDTO.class);
+            return entities.stream().map((entity) -> {
+                PersonDTO dto = ObjectMapper.parseObject(entity, PersonDTO.class);
                 Hateoas(dto);
                 return dto;
             }).toList();
@@ -165,7 +156,7 @@ public class PersonServices {
         }
         logger.warn("Updating Person");
 
-        Person up = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+        Person up = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
         up.setFirstName(person.getFirstName());
         up.setLastName(person.getLastName());
@@ -179,6 +170,20 @@ public class PersonServices {
         return hate;
     }
 
+    @Transactional
+    public PersonDTO disablePerson(Long id) {
+
+        logger.warn("Disabling Person");
+
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        repository.disablePerson(id);
+
+        Person entity = repository.findById(id).get();
+        PersonDTO dto = parseObject(entity, PersonDTO.class);
+        Hateoas(dto);
+        return dto;
+    }
+
     public void delete(Long id) {
 
         if (id == null) {
@@ -187,24 +192,32 @@ public class PersonServices {
 
         logger.warn("Deleting Person");
 
-        Person del = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+        Person del = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
         repository.delete(del);
     }
 
-    @Transactional
-    public PersonDTO disablePerson(Long id) {
+    private PagedModel<EntityModel<PersonDTO>> buildPagedModel(Pageable page, Page<Person> people) {
+        var peopleWithLinks = people.map((person) -> {
+            var dto = parseObject(person, PersonDTO.class);
+            Hateoas(dto);
+            return dto;
+        });
 
-        logger.warn("Disabling Person");
+        Link findAllLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PersonController.class)
+                .findAll(page.getPageNumber(), page.getPageSize(), String.valueOf(page.getSort()))).withSelfRel();
 
-        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
-        repository.disablePerson(id);
+        return assembler.toModel(peopleWithLinks, findAllLink);
+    }
 
-        Person entity = repository.findById(id).get();
-        PersonDTO dto = parseObject(entity, PersonDTO.class);
-
-        return dto;
-
+    private static void Hateoas(PersonDTO result) {
+        result.add(linkTo(methodOn(PersonController.class).findById(result.getId())).withSelfRel().withType("GET"));
+        result.add(linkTo(methodOn(PersonController.class).create(result)).withRel("create").withType("POST"));
+        result.add(linkTo(methodOn(PersonController.class)).slash("massCreation").withRel("massCreation").withType("POST"));
+        result.add(linkTo(methodOn(PersonController.class).update(result, result.getId())).withRel("update").withType("PUT"));
+        result.add(linkTo(methodOn(PersonController.class).disablePerson(result.getId())).withRel("disable").withType("PATCH"));
+        result.add(linkTo(methodOn(PersonController.class).delete(result.getId())).withRel("delete").withType("DELETE"));
+        result.add(linkTo(methodOn(PersonController.class).exportPage(1,12,"asc",null)).withRel("exportPage").withType("GET").withTitle("Export People"));
     }
 
     //-- Version 2 --
@@ -218,26 +231,4 @@ public class PersonServices {
 
     }
 
-    private static void Hateoas(PersonDTO result) {
-        result.add(linkTo(methodOn(PersonController.class).findById(result.getId())).withSelfRel().withType("GET"));
-        result.add(linkTo(methodOn(PersonController.class).create(result)).withRel("create").withType("POST"));
-        result.add(linkTo(methodOn(PersonController.class)).slash("massCreation").withRel("massCreation").withType("POST"));
-        result.add(linkTo(methodOn(PersonController.class).update(result, result.getId())).withRel("update").withType("PUT"));
-        result.add(linkTo(methodOn(PersonController.class).disablePerson(result.getId())).withRel("disable").withType("PATCH"));
-        result.add(linkTo(methodOn(PersonController.class).delete(result.getId())).withRel("delete").withType("DELETE"));
-        result.add(linkTo(methodOn(PersonController.class).exportPage(1,12,"asc",null)).withRel("exportPage").withType("GET").withTitle("Export People"));
-    }
-
-    private PagedModel<EntityModel<PersonDTO>> buildPagedModel(Pageable page, Page<Person> people) {
-        var peopleWithLinks = people.map((x) -> {
-            var dto = parseObject(x, PersonDTO.class);
-            Hateoas(dto);
-            return dto;
-        });
-
-        Link findAllLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PersonController.class)
-                .findAll(page.getPageNumber(), page.getPageSize(), String.valueOf(page.getSort()))).withSelfRel();
-
-        return assembler.toModel(peopleWithLinks, findAllLink);
-    }
 }

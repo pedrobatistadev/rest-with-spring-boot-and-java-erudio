@@ -2,6 +2,11 @@ cors:
   originPatterns: https://github.com/pedrobatistadev
 file:
   upload-dir: /Users/pedro/Documentos/UploadDir
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 3600000
 email:
   subject: "Default Subject"
   message: "Default Message"

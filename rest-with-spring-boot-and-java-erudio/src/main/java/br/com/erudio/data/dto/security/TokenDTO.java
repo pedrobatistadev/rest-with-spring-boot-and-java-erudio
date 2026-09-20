@@ -9,7 +9,7 @@ public class TokenDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String username;
-    private String authenticated;
+    private Boolean authenticated;
     private Date created;
     private Date expiration;
     private String accessToken;
@@ -18,7 +18,7 @@ public class TokenDTO implements Serializable {
     public TokenDTO() {
     }
 
-    public TokenDTO(String username, String authenticated, Date created, Date expiration, String accessToken, String refreshToken) {
+    public TokenDTO(String username, Boolean authenticated, Date created, Date expiration, String accessToken, String refreshToken) {
         this.username = username;
         this.authenticated = authenticated;
         this.created = created;
@@ -35,11 +35,11 @@ public class TokenDTO implements Serializable {
         this.username = username;
     }
 
-    public String getAuthenticated() {
+    public Boolean getAuthenticated() {
         return authenticated;
     }
 
-    public void setAuthenticated(String authenticated) {
+    public void setAuthenticated(Boolean authenticated) {
         this.authenticated = authenticated;
     }
 

@@ -7,6 +7,11 @@ file:
   email:
     subject: "Default Subject"
     message: "Default Message"
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expired-length: 3600000
 spring:
   application:
     name: rest-with-spring-boot-and-java-erudio

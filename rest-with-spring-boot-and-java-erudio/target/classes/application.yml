@@ -42,7 +42,7 @@ spring:
       max-request-size: 215MB
 logging:
   level:
-    root: INFO
+    root: TRACE
     #net.sf.jasperreports.engine.*: TRACE
     #br.com.erudio: WARN
 spring-doc:

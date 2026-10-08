@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/person/v1")
+@RequestMapping("/api/person")
 public class PersonController implements PersonControllerDocs {
 
     @Autowired

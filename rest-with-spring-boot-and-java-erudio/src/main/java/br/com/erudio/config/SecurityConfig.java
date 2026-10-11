@@ -28,8 +28,8 @@ public class SecurityConfig {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenFilter) {
-        this.tokenProvider = jwtTokenFilter;
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.tokenProvider = jwtTokenProvider;
     }
 
     @Bean
@@ -72,5 +72,4 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .build();
     }
-
 }

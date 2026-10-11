@@ -4,6 +4,7 @@ import br.com.erudio.controllers.docs.BookControllerDocs;
 import br.com.erudio.data.dto.v1.BookCreateDTO;
 import br.com.erudio.data.dto.v1.BookDTO;
 import br.com.erudio.services.BookService;
+import com.beust.ah.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

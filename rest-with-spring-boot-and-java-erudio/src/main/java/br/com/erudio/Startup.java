@@ -1,5 +1,7 @@
 package br.com.erudio;
 
+import br.com.erudio.controllers.AuthController;
+import com.beust.ah.A;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -17,7 +19,6 @@ public class Startup {
         SpringApplication.run(Startup.class, args);
 
         //generateHashedPassword();
-
     }
 
         private static void generateHashedPassword() {

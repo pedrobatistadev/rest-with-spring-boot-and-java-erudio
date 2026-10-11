@@ -18,8 +18,8 @@ public class JwtTokenFilter extends GenericFilterBean {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    public JwtTokenFilter(JwtTokenProvider jwtTokenFilter) {
-        this.tokenProvider = jwtTokenFilter;
+    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
+        this.tokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -33,6 +33,5 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
         }
         filter.doFilter(request, response);
-
     }
 }

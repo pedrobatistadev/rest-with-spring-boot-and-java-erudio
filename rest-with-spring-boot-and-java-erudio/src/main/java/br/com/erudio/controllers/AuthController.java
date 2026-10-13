@@ -25,7 +25,7 @@ public class AuthController implements AuthControllerDocs {
         var token = service.signIn(credentials);
         if (token == null) ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
 
-        return ResponseEntity.ok().body(token);
+        return token;
     }
 
     @PutMapping(value = "/refresh/{username}")
@@ -36,7 +36,7 @@ public class AuthController implements AuthControllerDocs {
         var token = service.refreshToken(username,refreshToken);
 
         if (token == null) ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        return ResponseEntity.ok().body(token);
+        return token;
     }
 
     @PostMapping(value = "/createUser", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})

@@ -1,0 +1,2 @@
+INSERT INTO `users` (`user_name`, `full_name`, `password`, `account_non_expired`, `account_non_locked`, `credentials_non_expired`, `enabled`) VALUES
+    ('pedro.batista', 'Pedro Batista', '{pbkdf2}5d30d395ae6a25262fb94cbe7e3976d85e314b2ab7c400ad224c54ec075178f2dbe481c34a981125', b'1', b'1', b'1', b'1');

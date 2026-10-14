@@ -5,6 +5,7 @@ import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.data.dto.v2.PersonDTOV2;
 import br.com.erudio.file.MediaTypes;
 import br.com.erudio.services.PersonServices;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -121,6 +122,7 @@ public class PersonController implements PersonControllerDocs {
 
     // -- Version 2 --
 
+    @Operation(summary = "Save People", description = "Save People", tags = {"People V2"})
     @PostMapping(value = "/v2",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     public PersonDTOV2 createV2(@RequestBody PersonDTOV2 person) {
         return service.createV2(person);

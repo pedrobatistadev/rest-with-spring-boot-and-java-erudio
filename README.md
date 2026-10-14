@@ -18,3 +18,4 @@ Upload e Download de arquivos, <br>
 Importação e Exportação de Planilhas Excel e CSV, <br>
 JasperReports <br>
 Envio de E-mail com Spring Mail e Gmail <br>
+JWT - JSON Web Token <br>

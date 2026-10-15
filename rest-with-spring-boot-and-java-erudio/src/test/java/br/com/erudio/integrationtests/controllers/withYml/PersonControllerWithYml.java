@@ -2,7 +2,9 @@ package br.com.erudio.integrationtests.controllers.withYml;
 
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.controllers.withYml.mapper.YAMLMapper;
+import br.com.erudio.integrationtests.dto.AccountCredentialsDTO;
 import br.com.erudio.integrationtests.dto.PersonDTO;
+import br.com.erudio.integrationtests.dto.TokenDTO;
 import br.com.erudio.integrationtests.dto.wrappers.xml.PagedModelXML;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.erudio.repository.PersonRepository;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -37,6 +40,7 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
     private static RequestSpecification specification2;
     private static YAMLMapper objectMapperToYaml;
     private static PersonDTO person;
+    private static TokenDTO tokenDTO;
 
     @Autowired
     private PersonRepository repository;
@@ -45,6 +49,36 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
     static void setUp() {
         objectMapperToYaml = new YAMLMapper();
         person = new PersonDTO();
+        tokenDTO = new TokenDTO();
+    }
+
+    @Test
+    @Order(0)
+    void signin() throws JsonProcessingException {
+
+        AccountCredentialsDTO credentials = new AccountCredentialsDTO("pedro.batista", "123456");
+
+        var content = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
+                )
+                .basePath("/auth/signin")
+                .port(TestConfigs.SERVER_PORT)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                .body(credentials, objectMapperToYaml)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(TokenDTO.class, objectMapperToYaml);
+
+        tokenDTO = content;
+
+        assertNotNull(tokenDTO.getAccessToken());
+        assertNotNull(tokenDTO.getRefreshToken());
+
     }
 
     @Test
@@ -93,7 +127,7 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
 
         specification = new RequestSpecBuilder()
                 .addHeaders(header())
-                .setBasePath("/person/v1")
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -143,7 +177,7 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
     void disablePerson() throws JsonProcessingException {
         specification2 = new RequestSpecBuilder()
                 .addHeaders(header())
-                .setBasePath("/person/v1/atu")
+                .setBasePath("/api/person/atu")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -181,7 +215,9 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
 
     private Map<String,String> header() {
         return Map.of(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB,
-                TestConfigs.ACCEPT,TestConfigs.MEDIATYPEYAML);
+                TestConfigs.ACCEPT,TestConfigs.MEDIATYPEYAML,
+                TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken()
+        );
     }
 
     private void init() {

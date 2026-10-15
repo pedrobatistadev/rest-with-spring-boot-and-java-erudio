@@ -12,6 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +38,9 @@ class PersonServicesTest {
     @Mock
     private PersonRepository repository;
 
+    @Mock
+    private PagedResourcesAssembler<PersonDTO> assembler;
+
     @BeforeAll
     void setUp() {
         input = new MockPerson();
@@ -47,12 +55,11 @@ class PersonServicesTest {
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals("pedro123", result.getPassword());
-        assertNotNull(result.getPassword());
-        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("self") && link.getHref().endsWith("/person/v1/1") && link.getType().equals("GET")));
-        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("create") && link.getHref().endsWith("/person/v1") && link.getType().equals("POST")));
-        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("update") && link.getHref().endsWith("/person/v1/1") && link.getType().equals("PUT")));
-        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("delete") && link.getHref().endsWith("/person/v1/1") && link.getType().equals("DELETE")));
+        assertNull(result.getPassword());
+        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("self") && link.getHref().endsWith("/api/person/1") && link.getType().equals("GET")));
+        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("create") && link.getHref().endsWith("/api/person") && link.getType().equals("POST")));
+        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("update") && link.getHref().endsWith("/api/person/1") && link.getType().equals("PUT")));
+        assertTrue(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("delete") && link.getHref().endsWith("/api/person/1") && link.getType().equals("DELETE")));
 
     }
 
@@ -95,16 +102,14 @@ class PersonServicesTest {
     }
 
     @Test
-    @Disabled("Teste")
     void findAll() {
-        List<Person> people = input.mockList();
-        when(repository.findAll()).thenReturn(people);
+        Pageable pageable = PageRequest.of(1,12, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Person> people = input.mockList();
+        when(repository.findAll(any(Pageable.class))).thenReturn(people);
 
-        List<PersonDTO> result = new ArrayList<>();
+        var result = services.findAll(pageable);
 
-        verify(repository).findAll();
-        PersonDTO fivePerson = result.get(5);
-        assertEquals("Female", fivePerson.getGender());
+        verify(repository).findAll(any(Pageable.class));
     }
 
     @Test

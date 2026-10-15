@@ -1,7 +1,9 @@
 package br.com.erudio.integrationtests.controllers.withJson;
 
 import br.com.erudio.config.TestConfigs;
+import br.com.erudio.integrationtests.dto.AccountCredentialsDTO;
 import br.com.erudio.integrationtests.dto.PersonDTO;
+import br.com.erudio.integrationtests.dto.TokenDTO;
 import br.com.erudio.integrationtests.dto.wrappers.json.WrapperPersonDTO;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -29,6 +32,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
     private static PersonDTO person;
+    private static TokenDTO tokenDTO;
 
     @BeforeAll
     static void setUp() {
@@ -36,6 +40,31 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         person = new PersonDTO();
+        tokenDTO = new TokenDTO();
+    }
+
+    @Test
+    @Order(0)
+    void signin() {
+        AccountCredentialsDTO credentials = new AccountCredentialsDTO("pedro.batista", "123456");
+
+        var content = given()
+                .basePath("/auth/signin")
+                .port(TestConfigs.SERVER_PORT)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(credentials)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(TokenDTO.class);
+
+        tokenDTO = content;
+
+        assertNotNull(tokenDTO.getAccessToken());
+        assertNotNull(tokenDTO.getRefreshToken());
     }
 
     @Test
@@ -45,7 +74,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
 
         specification = new RequestSpecBuilder()
                 .addHeaders(header())
-                .setBasePath("/person/v1")
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -97,7 +126,8 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
     void disable() throws JsonProcessingException {
         RequestSpecification specification2 = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
-                .setBasePath("/person/v1/atu")
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
+                .setBasePath("/api/person/atu")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -216,7 +246,8 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
     private Map<String,String> header() {
         return Map.of(
                 TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB,
-                TestConfigs.ACCEPT, TestConfigs.MEDIATYPEJSON
+                TestConfigs.ACCEPT, TestConfigs.MEDIATYPEJSON,
+                TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken()
         );
     }
 

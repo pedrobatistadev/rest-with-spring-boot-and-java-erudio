@@ -1,7 +1,9 @@
 package br.com.erudio.integrationtests.controllers.corsWithjson;
 
 import br.com.erudio.config.TestConfigs;
+import br.com.erudio.integrationtests.dto.AccountCredentialsDTO;
 import br.com.erudio.integrationtests.dto.PersonDTO;
+import br.com.erudio.integrationtests.dto.TokenDTO;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -16,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -25,6 +28,7 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
     private static PersonDTO person;
+    private static TokenDTO tokenDTO;
 
     @BeforeAll
     static void setUp() {
@@ -32,16 +36,42 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         person = new PersonDTO();
+        tokenDTO = new TokenDTO();
     }
 
     @Test
     @Order(1)
+    void signin() {
+        AccountCredentialsDTO credentials = new AccountCredentialsDTO("pedro.batista", "123456");
+
+        var content = given()
+                .basePath("/auth/signin")
+                .port(TestConfigs.SERVER_PORT)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(credentials)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(TokenDTO.class);
+
+        tokenDTO = content;
+
+        assertNotNull(tokenDTO.getAccessToken());
+        assertNotNull(tokenDTO.getRefreshToken());
+    }
+
+    @Test
+    @Order(2)
     void create() throws JsonProcessingException {
         mockPerson();
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
-                .setBasePath("/person/v1")
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -71,11 +101,12 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void createWithWrongOrigin() throws JsonProcessingException {
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_WRONG)
-                .setBasePath("/person/v1")
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -96,12 +127,13 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void findById() throws JsonProcessingException {
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
-                .setBasePath("/person/v1")
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -125,13 +157,14 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void findByIdWithWrongOrigin() throws JsonProcessingException {
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_WRONG)
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
                 .setContentType(MediaType.APPLICATION_JSON_VALUE)
-                .setBasePath("/person/v1")
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -151,13 +184,14 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void delete() throws JsonProcessingException {
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GITHUB)
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
                 .setContentType(MediaType.APPLICATION_JSON_VALUE)
-                .setBasePath("/person/v1")
+                .setBasePath("/api/person")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))

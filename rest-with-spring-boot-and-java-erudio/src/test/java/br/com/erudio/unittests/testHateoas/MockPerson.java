@@ -2,6 +2,8 @@ package br.com.erudio.unittests.testHateoas;
 
 import br.com.erudio.data.dto.v1.PersonDTO;
 import br.com.erudio.model.Person;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -31,13 +33,13 @@ public class MockPerson {
         return dto;
     }
 
-    public List<Person> mockList () {
+    public Page<Person> mockList () {
         List<Person> people = new ArrayList<>();
         for (Long i = 0L; i < 10L; i++) {
             people.add(mockEntity(i));
         }
 
-        return people;
+        return new PageImpl<>(people);
     }
 
 }

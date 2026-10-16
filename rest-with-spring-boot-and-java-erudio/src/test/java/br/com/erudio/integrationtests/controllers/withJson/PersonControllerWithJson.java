@@ -95,7 +95,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         person = result;
 
         assertNotNull(result);
-        assertEquals("Klaus", result.getFirstName());
+        assertEquals("Bento", result.getFirstName());
         assertEquals("New Orleans - Luisiana - EUA", result.getAddress());
 
         assertTrue(person.getId() > 0);
@@ -118,7 +118,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
 
         assertNotNull(result.getId());
-        assertEquals("Klaus", result.getFirstName());
+        assertEquals("Bento", result.getFirstName());
     }
 
     @Test
@@ -147,14 +147,14 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
         PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
 
         assertNotNull(result.getId());
-        assertEquals("Klaus", result.getFirstName());
+        assertEquals("Bento", result.getFirstName());
         assertFalse(result.getEnabled());
     }
 
     @Test
     @Order(4)
     void update() throws JsonProcessingException {
-        person.setFirstName("Elijah");
+        person.setFirstName("Finn");
 
         String content = given(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -170,7 +170,7 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
 
         PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
 
-        assertEquals("Elijah", person.getFirstName());
+        assertEquals("Finn", person.getFirstName());
     }
 
     @Test
@@ -236,8 +236,8 @@ class PersonControllerWithJson extends AbstractIntegrationTest {
     }
 
     private void mockPerson() {
-        person.setFirstName("Klaus");
-        person.setLastName("Mikaelson22");
+        person.setFirstName("Bento");
+        person.setLastName("Mikael");
         person.setAddress("New Orleans - Luisiana - EUA");
         person.setGender("Male");
         person.setEnabled(true);

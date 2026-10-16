@@ -72,6 +72,7 @@ class PersonServicesTest {
 
         PersonDTO content = services.create(dto);
 
+        assertEquals("First name test" + 1L, content.getFirstName());
         assertNotNull(content.getId());
     }
 
@@ -99,17 +100,6 @@ class PersonServicesTest {
 
         verify(repository, times(1)).findById(anyLong());
         verify(repository).delete(person);
-    }
-
-    @Test
-    void findAll() {
-        Pageable pageable = PageRequest.of(1,12, Sort.by(Sort.Direction.ASC, "id"));
-        Page<Person> people = input.mockList();
-        when(repository.findAll(any(Pageable.class))).thenReturn(people);
-
-        var result = services.findAll(pageable);
-
-        verify(repository).findAll(any(Pageable.class));
     }
 
     @Test

@@ -96,7 +96,7 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .body()
                 .as(PersonDTO.class, objectMapperToYaml);
 
-        assertEquals("Grasieli", content.getFirstName());
+        assertEquals("Maria", content.getFirstName());
     }
 
     @Test
@@ -153,7 +153,7 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
     @Test
     @Order(2)
     void update() throws JsonProcessingException {
-        person.setFirstName("Grasieli");
+        person.setFirstName("Maria");
 
         var retorno = given().config(RestAssuredConfig.config().encoderConfig(EncoderConfig.encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
                 ).spec(specification)
@@ -169,7 +169,7 @@ class PersonControllerWithYml extends AbstractIntegrationTest {
                 .as(PersonDTO.class, objectMapperToYaml);
 
         person = retorno;
-        assertEquals("Grasieli", retorno.getFirstName());
+        assertEquals("Maria", retorno.getFirstName());
     }
 
     @Test

@@ -94,7 +94,7 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
         System.out.println("Id do teste 1: " + person.getId());
 
         assertNotNull(result);
-        assertEquals("Klaus", result.getFirstName());
+        assertEquals("Bento", result.getFirstName());
         assertEquals("New Orleans - Luisiana - EUA", result.getAddress());
 
         assertTrue(result.getId() > 0);
@@ -153,7 +153,7 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
         PersonDTO result = objectMapper.readValue(content, PersonDTO.class);
 
         assertNotNull(result.getId());
-        assertEquals("Klaus", result.getFirstName());
+        assertEquals("Bento", result.getFirstName());
     }
 
     @Test
@@ -206,8 +206,8 @@ class PersonControllerCorsWithJson extends AbstractIntegrationTest {
     }
 
     private void mockPerson() {
-        person.setFirstName("Klaus");
-        person.setLastName("Mikaelson22");
+        person.setFirstName("Bento");
+        person.setLastName("Miguel");
         person.setAddress("New Orleans - Luisiana - EUA");
         person.setGender("Male");
         person.setEnabled(true);

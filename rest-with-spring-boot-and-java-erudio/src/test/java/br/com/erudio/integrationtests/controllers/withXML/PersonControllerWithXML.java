@@ -89,7 +89,7 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
                 .asString();
 
         PersonDTO result = objectMapperToXML.readValue(content, PersonDTO.class);
-        assertEquals("Grasieli", result.getFirstName());
+        assertEquals("Maria", result.getFirstName());
     }
 
     @Test
@@ -171,7 +171,7 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
     @Test
     @Order(2)
     void update() throws JsonProcessingException {
-        person.setFirstName("Grasieli");
+        person.setFirstName("Maria");
 
         String content = given(specification)
                 .contentType(MediaType.APPLICATION_XML_VALUE)
@@ -187,7 +187,7 @@ class PersonControllerWithXML extends AbstractIntegrationTest {
 
         PersonDTO retorno = objectMapperToXML.readValue(content, PersonDTO.class);
         person = retorno;
-        assertEquals("Grasieli", retorno.getFirstName());
+        assertEquals("Maria", retorno.getFirstName());
     }
 
     @Test

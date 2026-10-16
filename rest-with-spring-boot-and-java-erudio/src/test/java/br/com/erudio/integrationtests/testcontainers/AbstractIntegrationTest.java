@@ -1,6 +1,5 @@
 package br.com.erudio.integrationtests.testcontainers;
 
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;

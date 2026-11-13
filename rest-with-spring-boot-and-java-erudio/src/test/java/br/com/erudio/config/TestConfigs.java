@@ -8,7 +8,6 @@ public interface TestConfigs {
     String ORIGIN_WRONG = "https://web.whatsapp.com";
     String ACCEPT = "Accept";
     String MEDIATYPEJSON = "application/json";
-    String CONTENT_TYPE = "Content-Type";
     String MEDIATYPEXML = "application/xml";
     String MEDIATYPEYAML = "application/yaml";
 }

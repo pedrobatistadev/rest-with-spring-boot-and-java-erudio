@@ -1,3 +1,5 @@
+server:
+  port: 80
 cors:
   originPatterns: https://github.com/pedrobatistadev
 file:

@@ -48,5 +48,4 @@ public class BookController implements BookControllerDocs {
 
         return ResponseEntity.noContent().build();
     }
-
 }

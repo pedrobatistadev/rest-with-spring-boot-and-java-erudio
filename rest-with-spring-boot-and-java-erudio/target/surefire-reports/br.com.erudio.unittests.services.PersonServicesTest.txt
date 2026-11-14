@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: br.com.erudio.unittests.services.PersonServicesTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.991 s -- in br.com.erudio.unittests.services.PersonServicesTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.881 s -- in br.com.erudio.unittests.services.PersonServicesTest

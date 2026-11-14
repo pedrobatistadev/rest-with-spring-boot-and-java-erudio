@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 43.87 s -- in br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 43.06 s -- in br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest
